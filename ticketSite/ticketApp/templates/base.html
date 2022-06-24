@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>{% block title %}Tickets{% endblock %}</title>
+  {% load static %}
+  <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+</head>
+<body>
+  <div class="header">
+    <a class="logo">Ticketing System</a>
+    <div class="header-right">
+      <a href="{% url 'index' %}"" class=sel>Tickets</a>
+      <a href="/admin/" class=sel>Admin Site</a>
+    </div>
+  </div>
+   <div id="body">
+   {% block content %}{% endblock %}
+  </div>
+</body>
+</html>

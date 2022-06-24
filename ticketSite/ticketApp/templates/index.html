@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block title %} Tickets {% endblock %}
+{% block content %}
+<table class="styled-table">
+ <thead>
+  <tr>
+   <th>Ticket</th>
+   <th>Summary</th>
+   <th>Status</th>
+   <th>Assignee</th>
+   <th>Created</th>
+   <th>Last Updated</th>
+  </tr>
+ </thead>
+ <tbody>
+  {% for ticket in tickets %}
+  <tr>
+   <td><a href="/ticket/{{ticket.id}}">{{ticket.id}}</td>
+   <td>{{ticket.title}}</td>
+   <td>{{ticket.status}}</td>
+   <td>{{ticket.assignee}}</td>
+   <td>{{ticket.created_at}}</td>
+   <td>{{ticket.updated_at}}</td>
+  </tr>
+  {% endfor %}
+ </tbody>
+</table>
+{% endblock %}
