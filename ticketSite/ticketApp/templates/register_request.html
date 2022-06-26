@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<form class="styled-table" method="POST">
+    {% csrf_token %}
+    {% for field in form %}
+    {{ field.label }} {{ field }} {{ field.errors }}<br>
+    {% endfor %}
+    <button type="submit" class="btn btn-info">Salveaza</button>
+    <p class="text-left">Have account? <a href="/login_request">Login</a>.</p>
+</form>
+{% endblock %}

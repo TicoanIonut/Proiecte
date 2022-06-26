@@ -15,12 +15,12 @@
  <tbody>
   {% for ticket in tickets %}
   <tr>
-   <td><a href="/ticket/{{ticket.id}}">{{ticket.id}}</td>
-   <td>{{ticket.title}}</td>
-   <td>{{ticket.status}}</td>
-   <td>{{ticket.assignee}}</td>
-   <td>{{ticket.created_at}}</td>
-   <td>{{ticket.updated_at}}</td>
+   <td><a href="/ticket/{{ticket.id}}">{{ticket.id}}</a></td>
+   <td><a href="/ticket/{{ticket.id}}">{{ticket.title}}</a></td>
+   <td><a href="/ticket/{{ticket.id}}">{{ticket.status}}</a></td>
+   <td><a href="/ticket/{{ticket.id}}">{{ticket.assignee}}</a></td>
+   <td><a href="/ticket/{{ticket.id}}">{{ticket.created_at}}</a></td>
+   <td><a href="/ticket/{{ticket.id}}">{{ticket.updated_at}}</a></td>
   </tr>
   {% endfor %}
  </tbody>
