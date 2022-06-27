@@ -1,20 +1,23 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1"/>
   <title>{% block title %}Tickets{% endblock %}</title>
   {% load static %}
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
   <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
 </head>
 <body>
   <div class="header">
-    <a href="{% url 'index' %}" class=sel>Tickets</a>
+    <a href="{% url 'index' %}" style="margin:10px;" class="btn btn-info">Tickets</a>
+    <a href="{% url 'CreateTicket' %}" style="margin:10px;" class="btn btn-info">CreateTicket</a>
     <div class="header-right">
       {% if user.is_authenticated %}
-      <span style="color:#ffff">Hi, {{ request.user.username|upper }}</span>
+          <a style="margin:10px;" >Hi, {{ request.user.username|upper }}</a>
       <a class="btn btn-info" href="/logout_request" style="margin:10px;">Logout</a>
       {% else %}
-      <a href="login_request/" class=sel>Login</a>
+      <a href="{% url 'login_request' %}" class="btn btn-info">Login</a>
       {% endif %}
     </div>
   </div>

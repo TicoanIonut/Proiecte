@@ -2,6 +2,8 @@ from django import forms
 from django.contrib.auth.models import User
 from django.forms import TextInput, PasswordInput, EmailInput
 
+from ticketApp.models import Ticket
+
 
 class NewAccountForm(forms.ModelForm):
 	class Meta:
@@ -25,5 +27,19 @@ class NewAccountForm(forms.ModelForm):
 			self._errors['username'] = self.error_class(['Username-ul deja exista!'])
 		return field_data
 
+
+class CreateTicketForm(forms.ModelForm):
+	class Meta:
+		model = Ticket
+		fields = ('title', 'status', 'assignee', 'compartment', 'description')
+
+		widgets = {
+			'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Title'}),
+			'status': forms.Select(attrs={'class': 'form-control'}),
+			'assignee': forms.Select(attrs={'class': 'form-control'}),
+			'compartment': forms.Select(attrs={'class': 'form-control'}),
+			'description': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Description'}),
+
+		}
 
 
