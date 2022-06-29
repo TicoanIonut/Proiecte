@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block title %} Tickets {% endblock %}
 {% block content %}
-<table class="styled-table">
+<table class="styled-table" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1">
  <thead>
   <tr>
    <th>Ticket</th>
@@ -11,20 +11,30 @@
    <th>Compartment</th>
    <th>Created</th>
    <th>Last Updated</th>
+   <th>Edit Ticket</th>
+   <th>Delete Ticket</th>
   </tr>
  </thead>
- <tbody>
-  {% for ticket in tickets %}
-  <tr>
-   <td><a href="/ticket/{{ticket.id}}">{{ticket.id}}</a></td>
-   <td><a href="/ticket/{{ticket.id}}">{{ticket.title}}</a></td>
-   <td><a href="/ticket/{{ticket.id}}">{{ticket.status}}</a></td>
-   <td><a href="/ticket/{{ticket.id}}">{{ticket.assignee}}</a></td>
-   <td><a href="/ticket/{{ticket.id}}">{{ticket.compartment}}</a></td>
-   <td><a href="/ticket/{{ticket.id}}">{{ticket.created_at}}</a></td>
-   <td><a href="/ticket/{{ticket.id}}">{{ticket.updated_at}}</a></td>
-  </tr>
-  {% endfor %}
- </tbody>
+ {% if user.is_authenticated %}
+          {% if user.id == assignee.id %}
+                   <tbody>
+                    {% for ticket in tickets %}
+                    <tr>
+                     <td><a href="/ticket/{{ticket.id}}">{{ticket.id}}</a></td>
+                     <td><a href="/ticket/{{ticket.id}}">{{ticket.title}}</a></td>
+                     <td><a href="/ticket/{{ticket.id}}">{{ticket.status}}</a></td>
+                     <td><a href="/ticket/{{ticket.id}}">{{ticket.assignee}}</a></td>
+                     <td><a href="/ticket/{{ticket.id}}">{{ticket.compartment}}</a></td>
+                     <td><a href="/ticket/{{ticket.id}}">{{ticket.created_at}}</a></td>
+                     <td><a href="/ticket/{{ticket.id}}">{{ticket.updated_at}}</a></td>
+                     <td><a href="{% url 'EditTicket' ticket.id %}" style="margin:10px;" class="btn btn-info">Edit</a></td>
+                     <td><a href="{% url 'DeleteTicket' ticket.id %}" style="margin:10px;" class="btn btn-info">Delete</a></td>
+                    </tr>
+                    {% endfor %}
+                   </tbody>
+              {% else %}
+             <p>se intampla ceva</p>
+             {% endif %}
+ {% endif %}
 </table>
 {% endblock %}
