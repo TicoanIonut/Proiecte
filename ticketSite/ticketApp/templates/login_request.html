@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
-    <form class="styled-table" method="POST">
+    <form method="POST">
         {% csrf_token %}
     <label>Username</label>
     <input type="text" name="username">

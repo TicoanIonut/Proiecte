@@ -20,3 +20,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include("ticketApp.urls")),
 ]
+
+admin.site.site_header = 'Ticket Administration'
+admin.site.site_title = 'Ticket Administration'
+admin.site.index_title = 'Ticket Administration'
