@@ -13,7 +13,7 @@ class NewAccountForm(forms.ModelForm):
 			'last_name': TextInput(attrs={'placeholder': 'Last name', 'class': 'form-control'}),
 			'email': EmailInput(attrs={'placeholder': 'Email', 'class': 'form-control'}),
 			'password': PasswordInput(attrs={'placeholder': 'Password', 'class': 'form-control'}),
-			'compartment': forms.Select(attrs={'placeholder': 'Compartment', 'class': 'form-control'}),
+			'compartment': forms.Select(attrs={'class': 'form-control'}),
 		}
 	
 	def clean(self):
@@ -27,18 +27,27 @@ class NewAccountForm(forms.ModelForm):
 		return field_data
 
 
-class CreateTicketForm(forms.ModelForm):
+class CreateTicketFormAdmin(forms.ModelForm):
 	class Meta:
 		model = Ticket
 		fields = ('title', 'status', 'assignee', 'compartment', 'description')
-
 		widgets = {
 			'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Title'}),
 			'status': forms.Select(attrs={'class': 'form-control'}),
 			'assignee': forms.Select(attrs={'class': 'form-control'}),
 			'compartment': forms.Select(attrs={'class': 'form-control'}),
 			'description': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Description'}),
-
 		}
 
+
+class CreateTicketForm(forms.ModelForm):
+	class Meta:
+		model = Ticket
+		fields = ('title', 'status',  'compartment', 'description')
+		widgets = {
+			'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Title'}),
+			'status': forms.Select(attrs={'class': 'form-control'}),
+			'compartment': forms.Select(attrs={'class': 'form-control'}),
+			'description': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Description'}),
+		}
 
