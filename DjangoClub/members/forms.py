@@ -8,11 +8,9 @@ class RegisterUserForm(UserCreationForm):
 	first_name = forms.CharField(max_length=50, widget=forms.TextInput(attrs={'class':'form-control'}))
 	last_name = forms.CharField(max_length=50, widget=forms.TextInput(attrs={'class':'form-control'}))
 	
-
 	class Meta:
 		model = User
 		fields = ('username', 'first_name', 'last_name', 'email', 'password1', 'password2')
-
 
 	def __init__(self, *args, **kwargs):
 		super(RegisterUserForm, self).__init__(*args, **kwargs)

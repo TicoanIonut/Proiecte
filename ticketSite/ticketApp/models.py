@@ -22,11 +22,10 @@ class Ticket(models.Model):
 	status = models.CharField(max_length=25, choices=TicketStatus.choices, default=TicketStatus.TO_DO)
 	compartment = models.CharField(max_length=25, choices=Compartiment.choices, default=Compartiment.comp1)
 	description = models.TextField()
-	# created_by = models.ForeignKey(User, on_delete=models.CASCADE)
 	created_at = models.DateTimeField('created at', auto_now_add=True)
 	updated_at = models.DateTimeField('updated at', auto_now=True)
 	
 	
 class UserCreate(User):
-	compartment = models.CharField(max_length=25, choices=Compartiment.choices, default=Compartiment.comp1)
+	compartment = models.CharField(max_length=25, choices=Compartiment.choices, default=None)
 	
