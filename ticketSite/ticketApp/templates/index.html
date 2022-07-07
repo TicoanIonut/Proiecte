@@ -15,9 +15,11 @@
         <th>Delete Ticket</th>
     </tr>
     </thead>
+
     {% if user.is_authenticated %}
     <tbody>
     {% for ticket in tickets %}
+    {% if user.usercreate.compartment == ticket.compartment %}
     <tr>
         <td><a href="/ticket/{{ticket.id}}">{{ticket.id}}</a></td>
         <td><a href="/ticket/{{ticket.id}}">{{ticket.assignee}}</a></td>
@@ -29,8 +31,10 @@
         <td><a href="{% url 'EditTicket' ticket.id %}" style="margin:10px;" class="btn btn-info">Edit</a></td>
         <td><a href="{% url 'DeleteTicket' ticket.id %}" style="margin:10px;" class="btn btn-info">Delete</a></td>
     </tr>
+    {% endif %}
     {% endfor %}
     </tbody>
+
     {% endif %}
 </table>
 {% endblock %}

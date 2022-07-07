@@ -38,7 +38,7 @@ def edit_ticket(request, ticket_id):
 				form.save()
 				return redirect('index')
 		else:
-			if request.user == ticket.assignee:
+			if request.user == ticket.assignee or request.user.usercreate.compartment == ticket.compartment:
 				form = CreateTicketForm(request.POST or None, instance=ticket)
 				if form.is_valid():
 					form.save()
