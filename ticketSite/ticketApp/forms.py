@@ -43,11 +43,10 @@ class CreateTicketFormAdmin(forms.ModelForm):
 class CreateTicketForm(forms.ModelForm):
 	class Meta:
 		model = Ticket
-		fields = ('title', 'status',  'compartment', 'description')
+		fields = ('title', 'status', 'compartment', 'description')
 		widgets = {
 			'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Title'}),
 			'status': forms.Select(attrs={'class': 'form-control'}),
 			'compartment': forms.Select(attrs={'class': 'form-control'}),
 			'description': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Description'}),
 		}
-

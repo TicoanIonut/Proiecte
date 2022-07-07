@@ -7,8 +7,8 @@ class TicketStatus(models.TextChoices):
 	IN_PROGRESS = 'In Progress'
 	IN_REVIEW = 'In Review'
 	DONE = 'Done'
-	
-	
+
+
 class Compartiment(models.TextChoices):
 	comp1 = 'comp1'
 	comp2 = 'comp2'
@@ -24,8 +24,9 @@ class Ticket(models.Model):
 	description = models.TextField()
 	created_at = models.DateTimeField('created at', auto_now_add=True)
 	updated_at = models.DateTimeField('updated at', auto_now=True)
-	
-	
+	active = models.BooleanField(default=True)
+
+
 class UserCreate(User):
 	compartment = models.CharField(max_length=25, choices=Compartiment.choices, default=None)
-	
+	active = models.BooleanField(default=True)
