@@ -51,7 +51,8 @@ def edit_ticket(request, ticket_id):
 def delete_ticket(request, ticket_id):
 	if request.user.is_authenticated:
 		ticket = Ticket.objects.get(pk=ticket_id)
-		if request.user == ticket.assignee or request.user.is_superuser:
+		if request.user == ticket.assignee or request.user.is_superuser or\
+				request.user.usercreate.compartment == ticket.compartment:
 			ticket.delete()
 			return redirect('index')
 		else:
