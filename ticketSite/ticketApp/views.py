@@ -37,6 +37,7 @@ def edit_ticket(request, ticket_id):
 			if form.is_valid():
 				form.save()
 				return redirect('index')
+			return render(request, 'EditTicket.html', {'ticket': ticket, 'form': form})
 		else:
 			if request.user == ticket.assignee or request.user.usercreate.compartment == ticket.compartment:
 				form = CreateTicketForm(request.POST or None, instance=ticket)

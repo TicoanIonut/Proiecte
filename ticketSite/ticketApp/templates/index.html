@@ -19,7 +19,7 @@
     {% if user.is_authenticated %}
     <tbody>
     {% for ticket in tickets %}
-    {% if user.usercreate.compartment == ticket.compartment %}
+    {% if user.usercreate.compartment == ticket.compartment or user.is_superuser %}
     <tr>
         <td><a href="/ticket/{{ticket.id}}">{{ticket.id}}</a></td>
         <td><a href="/ticket/{{ticket.id}}">{{ticket.assignee}}</a></td>
