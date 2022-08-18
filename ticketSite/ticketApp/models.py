@@ -24,9 +24,9 @@ class Ticket(models.Model):
 	description = models.TextField()
 	created_at = models.DateTimeField('created at', auto_now_add=True)
 	updated_at = models.DateTimeField('updated at', auto_now=True)
-	active = models.BooleanField(default=True)
+	active = models.BooleanField(default=1)
 
 
 class UserCreate(User):
 	compartment = models.CharField(max_length=25, choices=Compartiment.choices, default=None)
-	active = models.BooleanField(default=True)
+	active = models.BooleanField(default=1)
