@@ -71,7 +71,7 @@
 }
 
 .styled-table tbody tr:last-of-type {
-    border-bottom: 2px solid #009879;
+    border-bottom: 5px solid #009879;
 }
 
 .styled-table tbody tr.active-row {
@@ -86,7 +86,7 @@
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
     padding: 12px 15px;
     margin-top: 1%;
-    margin-left:1%;
+    margin-left: 1%;
     margin-right: 1%;
     font-size: 0.9em;
     font-family: sans-serif;
