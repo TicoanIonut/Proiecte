@@ -36,7 +36,7 @@ class CreateTicketFormAdmin(forms.ModelForm):
 			'status': forms.Select(attrs={'class': 'form-control'}),
 			'assignee': forms.Select(attrs={'class': 'form-control'}),
 			'compartment': forms.Select(attrs={'class': 'form-control'}),
-			'description': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Description'}),
+			'description': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Description'}),
 		}
 
 
@@ -48,5 +48,5 @@ class CreateTicketForm(forms.ModelForm):
 			'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Title'}),
 			'status': forms.Select(attrs={'class': 'form-control'}),
 			'compartment': forms.Select(attrs={'class': 'form-control'}),
-			'description': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Description'}),
+			'description': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Description'}),
 		}

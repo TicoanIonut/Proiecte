@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
+<div class="container p-5 mb-5">
 <form method="POST">
     {% csrf_token %}
     {% for field in form %}
@@ -8,4 +9,5 @@
     <button type="submit" class="btn btn-info">Save</button>
 
 </form>
+</div>
 {% endblock %}

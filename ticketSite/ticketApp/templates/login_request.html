@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
+<div class="container p-5 mb-5">
     <form method="POST">
         {% csrf_token %}
     <label>Username</label>
@@ -12,4 +13,5 @@
         <span style="color: red;">{{ form.non_field_errors }}</span>
         <p class="text-left">Don't have an account? <a href="{% url 'register_request' %}">Create account</a>.</p>
     </form>
+    </div>
 {% endblock %}

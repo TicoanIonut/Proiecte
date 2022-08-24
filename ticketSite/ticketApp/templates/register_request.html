@@ -7,6 +7,7 @@
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
 {% endif %}
+<div class="container p-5 mb-5">
 <form method="POST">
     {% csrf_token %}
     {% for field in form %}
@@ -15,4 +16,5 @@
     <button type="submit" class="btn btn-info">Salveaza</button>
     <p class="text-left">Have account? <a href="/login_request">Login</a>.</p>
 </form>
+    </div>
 {% endblock %}
