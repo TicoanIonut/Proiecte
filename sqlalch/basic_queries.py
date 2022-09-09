@@ -1,7 +1,7 @@
 # queries.py
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from table_def import Album, Artist
+from models import Album, Artist
 
 engine = create_engine('sqlite:///mymusic.db', echo=True)
 

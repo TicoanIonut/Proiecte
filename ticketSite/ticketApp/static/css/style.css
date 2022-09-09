@@ -71,7 +71,12 @@
 }
 
 .styled-table tbody tr:last-of-type {
-    border-bottom: 5px solid #009879;
+    border-bottom: 2px solid transparent;
+
+
+}.styled-table tbody tr {
+    border-right: 5px solid transparent;
+    border-left: 5px solid transparent;
 }
 
 .styled-table tbody tr.active-row {
