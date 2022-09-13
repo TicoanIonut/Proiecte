@@ -13,7 +13,7 @@ session = Session()
 # res = session.query(Artist).all()
 # for artist in res:
 # 	print(artist.name)
-
+#
 # how to SELECT the first result
 # res = session.query(Artist).filter(Artist.name == "Newsboys").first()
 # for artist in res:
