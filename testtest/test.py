@@ -21,4 +21,6 @@ import pandas as pd
 #        print(data.Breed)
 
 df = pd.read_excel('LISTA-AGENTIILOR-DE-TURISM-LICENTIATE-actualizare-13.10.2022.xlsx')
+df = df.rename(columns=df.iloc[0]).drop(index=0).iloc[:, 1:].reset_index(drop=True)
+# df[(df['Color']=='BROWN') & (df['Breed']=='MIXED')]['DogName']
 print(df)
