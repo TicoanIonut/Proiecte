@@ -9,7 +9,7 @@ WHITE = (255, 255, 255)
 RED = (255, 0, 0)
 YELLOW = (255, 255, 0)
 HEALTH_FONT = pygame.font.SysFont('comicsans', 30)
-WINNER_FONT = pygame.font.SysFont('comicsans', 70)
+WINNER_FONT = pygame.font.SysFont('comicsans', 50)
 
 
 FPS = 60
@@ -36,8 +36,8 @@ def drew_window(red, yellow, yellow_bullets, red_bullets, yellow_health, red_hea
 	WIN.blit(SPACE, (0, 0))
 	pygame.draw.rect(WIN, BLACK, BORDER)
 	
-	yellow_health_text = HEALTH_FONT.render('Yellow HEALTH: ' + str(yellow_health), 1, WHITE)
-	red_health_text = HEALTH_FONT.render('Red HEALTH: ' + str(red_health), 1, WHITE)
+	yellow_health_text = HEALTH_FONT.render('Viata Tati: ' + str(yellow_health), 1, WHITE)
+	red_health_text = HEALTH_FONT.render('Viata Tudor: ' + str(red_health), 1, WHITE)
 	WIN.blit(yellow_health_text, (10, 10))
 	WIN.blit(red_health_text, (350, 950))
 	
@@ -97,13 +97,13 @@ def draw_winner(text):
 	pygame.time.delay(5000)
 
 
-def main():
+def BattleShip():
 	yellow = pygame.Rect(275, 175, SPACESHIP_WIDTH, SPACESHIP_HEIGHT)
 	red = pygame.Rect(275, 825, SPACESHIP_WIDTH, SPACESHIP_HEIGHT)
 	yellow_bullets = []
 	red_bullets = []
 	yellow_health = 10
-	red_health = 10
+	red_health = 30
 	clock = pygame.time.Clock()
 	run = True
 	while run:
@@ -125,9 +125,9 @@ def main():
 				red_health -= 1
 		winner_text = ''
 		if yellow_health <= 0:
-			winner_text = 'RED WINS!'
+			winner_text = 'TUDOR CASTIGA!'
 		if red_health <= 0:
-			winner_text = 'YELLOW WINS!'
+			winner_text = 'TATI CASTIGA!'
 		if winner_text != '':
 			draw_winner(winner_text)
 			break
@@ -138,8 +138,7 @@ def main():
 		handle_bullets(yellow_bullets, red_bullets, yellow, red)
 		
 		drew_window(red, yellow, yellow_bullets, red_bullets, yellow_health, red_health)
-	main()
+	BattleShip()
 	
 	
-if __name__ == '__main__':
-	main()
+BattleShip()
