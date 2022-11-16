@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block title %}Home{% endblock %}
+{% block content %}
+
+<div class="row">
+    {% for p in products %}
+    <div class="col-lg-3" style="background-color: #fff; margin: 10px;">
+        <img class="thumbnail" src="{{p.image.url}}" width="60%" height="60%" style="object-fit: cover; object-fit: contain; background-color: #fff;">
+        <div class="box-element product" style="background-color: #fff;">
+            <h6><strong>{{p.name}}</strong></h6>
+            <hr>
+            <button data-product="{{p.id}}" data-action="add" class="btn btn-outline-secondary add-btn update-cart">Add to cart</button>
+            <a  class="btn btn-outline-info" href="{% url 'ecomm:productdetail' p.slug %}">Details</a>
+            <h4 style="display: inline-block; float: right">{{p.price|floatformat:2}} $</h4>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
