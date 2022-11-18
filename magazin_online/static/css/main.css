@@ -36,7 +36,7 @@ h1,h2,h3,h4,h5,h6{
 	display: block;
 	text-align: center;
 	color:#fff;
-	background-color: red;
+	background-color: #17a2b8;
 	width: 20px;
 	height: 25px;
 	border-radius: 50%;
@@ -48,7 +48,7 @@ h1,h2,h3,h4,h5,h6{
 }
 
 .btn{
-	border-radius: 0;
+	border-radius: 3;
 }
 
 .row-image{
