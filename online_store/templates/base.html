@@ -36,8 +36,8 @@
             <a href="" class="btn btn-info" style="margin:10px; border-radius: 5px;">Login</a>
 
             <a href="" class="btn btn-info" style="margin:10px; border-radius: 5px;">New User</a>
-            <a href="">
-                <img id="cart-icon" src="/static/cart.jpg">
+            <a href="{% url 'ecomm:mycart' %}">
+                <img id="cart-icon" src="{% static 'cart.png' %}">
             </a>
             <p id="cart-total"></p>
         </div>

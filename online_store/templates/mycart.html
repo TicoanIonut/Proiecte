@@ -2,9 +2,48 @@
 {% load static %}
 {% block title %}Cart{% endblock %}
 {% block content %}
-<div class="container">
-    <h4>Product added</h4>
-</div>
-
-
-{% endblock %}
+	<div class="row" >
+		<div class="col-lg-12" >
+			<div class="box-element" style="background-color: #fff;" >
+				<a  class="btn btn-outline-dark" href="{% url 'ecomm:home' %}">&#x2190; Continue Shopping</a>
+				<br>
+				<br>
+				<table class="table" >
+					<tr>
+						<th><h5>Total Products: <strong>{{ cart.get_cart_items }}</strong></h5></th>
+						<th><h5>Total Order: <strong>{{ cart.total }} $</strong></h5></th>
+						<th>
+							<a  style="float:right; margin:5px;" class="btn btn-info" href="">Order</a>
+						</th>
+					</tr>
+				</table>
+			</div>
+			<br>
+			<div class="box-element" style="background-color: #fff;">
+				<div class="cart-row">
+					<div style="flex:2"></div>
+					<div style="flex:2"><strong>Product</strong></div>
+					<div style="flex:1"><strong>Price</strong></div>
+					<div style="flex:1"><strong>Quantity</strong></div>
+					<div style="flex:1"><strong>Total</strong></div>
+				</div>
+				{% for cp in cart.cartproduct_set.all %}
+				<div class="cart-row">
+					<div style="flex:2"><img class="row-image" src="{{cp.product.image.url}}"></div>
+					<div style="flex:2"><p>{{ cp.product.title }}</p></div>
+					<div style="flex:1"><p>{{ cp.product.price }} $</p></div>
+					<div style="flex:1">
+						<p class="quantity">{{ cp.quantity }}</p>
+							<div class="cart-row">
+							<a href="" class="btn btn"><strong> + </strong></a>
+							<a href="" class="btn btn"><strong> - </strong></a>
+							<a href="" class="btn btn"><strong> x </strong></a>
+						</div>
+						</div>
+					<div style="flex:1"><p>{{ cp.subtotal }} $</p></div>
+				</div>
+				{% endfor %}
+			</div>
+		</div>
+	</div>
+{% endblock content %}

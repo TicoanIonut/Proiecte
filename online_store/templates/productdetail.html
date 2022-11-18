@@ -8,8 +8,8 @@
 
     <div class="row">
     <div class="col-lg" align="center">
-        <img class="thumbnail" src="{{product.image.url}}" width="50%" height="50%" style="object-fit: cover; object-fit: contain; background-color: #fff;">
-        <div class="box-element product"  style="background-color: #fff; width: 50%">
+        <img class="thumbnail" src="{{product.image.url}}" style="object-fit: cover; object-fit: contain; background-color: #fff;">
+        <div class="box-element product"  style="background-color: #fff;">
             <h3><strong>{{product.title}}</strong></h3>
             <hr>
             <a href="{% url 'ecomm:addtocart' product.id %}" class="btn btn-outline-secondary add-btn update-cart">Add to cart</a>

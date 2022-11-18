@@ -28,7 +28,13 @@ class Cart(models.Model):
 	def __str__(self):
 		return 'Cart' + str(self.id)
 	
-	
+	@property
+	def get_cart_items(self):
+		allitems = self.cartproduct_set.all()
+		total = sum([product.quantity for product in allitems])
+		return total
+
+
 class CartProduct(models.Model):
 	cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
 	product = models.ForeignKey(Product, on_delete=models.CASCADE)
@@ -39,6 +45,7 @@ class CartProduct(models.Model):
 	def __str__(self):
 		return	'Cart' + str(self.cart.id) + 'CartProduct: ' + str(self.id)
 	
+
 	
 class Order(models.Model):
 	cart = models.OneToOneField(Cart, on_delete=models.CASCADE)
