@@ -1,3 +1,5 @@
+from django.http import HttpResponseRedirect
+from django.shortcuts import redirect
 from django.views.generic import TemplateView
 from .models import *
 
@@ -7,6 +9,12 @@ class HomeView(TemplateView):
 	
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
+		cart_id = self.request.session.get("cart_id", None)
+		if cart_id:
+			cart = Cart.objects.get(id=cart_id)
+		else:
+			cart = None
+		context['cart'] = cart
 		context['products'] = Product.objects.all()
 		return context
 	
@@ -18,6 +26,12 @@ class ProductDetailView(TemplateView):
 		context = super().get_context_data(**kwargs)
 		url_slug = self.kwargs['slug']
 		product = Product.objects.get(slug=url_slug)
+		cart_id = self.request.session.get("cart_id", None)
+		if cart_id:
+			cart = Cart.objects.get(id=cart_id)
+		else:
+			cart = None
+		context['cart'] = cart
 		context['product'] = product
 		return context
 	
@@ -25,8 +39,8 @@ class ProductDetailView(TemplateView):
 class AddToCartView(TemplateView):
 	template_name = 'home.html'
 	
-	def get_context_data(self, **kwargs):
-		context = super().get_context_data(**kwargs)
+	def dispatch(self, request, *args, **kwargs):
+		context = super().dispatch(request, **kwargs)
 		context['products'] = Product.objects.all()
 		product_id = self.kwargs['pro_id']
 		product_obj = Product.objects.get(id=product_id)
@@ -41,11 +55,13 @@ class AddToCartView(TemplateView):
 				cartproduct.save()
 				cart_obj.total += product_obj.price
 				cartproduct.save()
+				return redirect('ecomm:home')
 			else:
 				cartproduct = CartProduct.objects.create(cart=cart_obj, product=product_obj, rate=product_obj.price,
 				                                         quantity=1, subtotal=product_obj.price)
 				cart_obj.total += product_obj.price
 				cart_obj.save()
+				return redirect('ecomm:home')
 		else:
 			cart_obj = Cart.objects.create(total=0)
 			self.request.session['cart_id'] = cart_obj.id
@@ -53,7 +69,7 @@ class AddToCartView(TemplateView):
 			                                         quantity=1, subtotal=product_obj.price)
 			cart_obj.total += product_obj.price
 			cart_obj.save()
-		return context
+		return super(AddToCartView, self).dispatch(request, *args, **kwargs)
 	
 	
 class MyCartView(TemplateView):

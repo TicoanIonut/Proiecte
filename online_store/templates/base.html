@@ -39,7 +39,7 @@
             <a href="{% url 'ecomm:mycart' %}">
                 <img id="cart-icon" src="{% static 'cart.png' %}">
             </a>
-            <p id="cart-total"></p>
+            <p id="cart-total">{{ cart.get_cart_items }}</p>
         </div>
     </div>
 </nav>

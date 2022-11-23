@@ -20,7 +20,7 @@ class Ticket(models.Model):
 	title = models.CharField(max_length=100)
 	assignee = models.ForeignKey(User, null=True, blank=True, on_delete=models.CASCADE)
 	status = models.CharField(max_length=25, choices=TicketStatus.choices, default=TicketStatus.TO_DO)
-	compartment = models.CharField(max_length=25, choices=Compartiment.choices, default=Compartiment.comp1)
+	compartment = models.CharField(max_length=25, choices=Compartiment.choices, default=None, null=False, blank=False)
 	description = models.TextField()
 	created_at = models.DateTimeField('created at', auto_now_add=True)
 	updated_at = models.DateTimeField('updated at', auto_now=True)
@@ -28,5 +28,5 @@ class Ticket(models.Model):
 
 
 class UserCreate(User):
-	compartment = models.CharField(max_length=25, choices=Compartiment.choices, default=None)
-	active = models.BooleanField(default=1)
+	compartment = models.CharField(max_length=25, choices=Compartiment.choices, default=None, null=False, blank=False)
+	active = models.BooleanField(default=0)

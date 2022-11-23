@@ -97,3 +97,8 @@
     font-family: sans-serif;
     min-width: 200px;
 }
+.rainbow-text {
+  background-image: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet);
+  -webkit-background-clip: text;
+  color: transparent;
+}
