@@ -11,4 +11,7 @@ urlpatterns = [
     path('EditTicket<ticket_id>/', views.edit_ticket, name='EditTicket'),
     path('DeleteTicket<ticket_id>/', views.delete_ticket, name='DeleteTicket'),
     path('InactiveTicket<ticket_id>/', views.inactive_ticket, name='InactiveTicket'),
+    path('DeactivateTicket<ticket_id>/', views.deactivate_ticket, name='DeactivateTicket'),
+    path('ActiveTicket<ticket_id>/', views.active_ticket, name='ActiveTicket'),
+    path('SuperMenueTickets/', views.super_menue_tickets, name='super_menue_tickets'),
 ]

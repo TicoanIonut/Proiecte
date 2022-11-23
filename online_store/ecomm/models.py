@@ -45,7 +45,6 @@ class CartProduct(models.Model):
 	def __str__(self):
 		return	'Cart' + str(self.cart.id) + 'CartProduct: ' + str(self.id)
 	
-
 	
 class Order(models.Model):
 	cart = models.OneToOneField(Cart, on_delete=models.CASCADE)
