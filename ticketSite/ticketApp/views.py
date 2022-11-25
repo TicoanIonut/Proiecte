@@ -57,6 +57,17 @@ def delete_ticket(request, ticket_id):
 
 
 @login_required
+def delete_users(request, user_id):
+	users = User.objects.get(pk=user_id)
+	if request.user.is_superuser:
+		users.delete()
+	return render(request, 'super_menue_users.html')
+
+
+"""inactive_ticket is just for normal users"""
+
+
+@login_required
 def inactive_ticket(request, ticket_id):
 	ticket = Ticket.objects.get(pk=ticket_id)
 	if request.user == ticket.assignee or request.user.is_superuser or\
@@ -64,7 +75,7 @@ def inactive_ticket(request, ticket_id):
 		ticket.active = 0
 		ticket.save()
 		return redirect('index')
-
+	
 
 @login_required
 def deactivate_ticket(request, ticket_id):
@@ -73,6 +84,15 @@ def deactivate_ticket(request, ticket_id):
 		ticket.active = 0
 		ticket.save()
 		return redirect('super_menue_tickets')
+	
+	
+@login_required
+def deactivate_users(request, user_id):
+	users = UserCreate.objects.get(pk=user_id)
+	if request.user.is_superuser:
+		users.active = 0
+		users.save()
+		return redirect('super_menue_users')
 
 
 @login_required
@@ -82,6 +102,15 @@ def active_ticket(request, ticket_id):
 		ticket.active = 1
 		ticket.save()
 		return redirect('super_menue_tickets')
+	
+
+@login_required
+def active_users(request, user_id):
+	if request.user.is_superuser:
+		users = UserCreate.objects.get(pk=user_id)
+		users.active = 1
+		users.save()
+		return redirect('super_menue_users')
 
 
 def index(request):
@@ -93,9 +122,14 @@ def index(request):
 def super_menue_tickets(request):
 	if request.user.is_superuser:
 		tickets = Ticket.objects.order_by('-created_at')
-		users = User.objects
-		context = {'tickets': tickets, 'users': users}
-		return render(request, 'super_menue_tickets.html', context)
+		return render(request, 'super_menue_tickets.html', {'tickets': tickets})
+
+
+@login_required
+def super_menue_users(request):
+	if request.user.is_superuser:
+		users = User.objects.order_by('-date_joined')
+		return render(request, 'super_menue_users.html', {'users': users})
 
 
 @login_required

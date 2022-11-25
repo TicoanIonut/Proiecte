@@ -34,10 +34,9 @@
 					<div style="flex:1"><p>{{ cp.product.price|floatformat:2 }} $</p></div>
 					<div style="flex:1">
 						<p class="quantity">{{ cp.quantity }}</p>
-							<div class="cart-row">
-							<a href="" class="btn btn"><strong> + </strong></a>
-							<a href="" class="btn btn"><strong> - </strong></a>
-							<a href="" class="btn btn"><strong> x </strong></a>
+						<div class="quantity">
+							<img class="chg-quantity update-cart" src="{% static  'arrow-up.png' %}">
+							<img class="chg-quantity update-cart" src="{% static  'arrow-down.png' %}">
 						</div>
 						</div>
 					<div style="flex:1"><p>{{ cp.subtotal|floatformat:2 }} $</p></div>

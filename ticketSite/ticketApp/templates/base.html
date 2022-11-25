@@ -18,7 +18,7 @@
       {% if user.is_authenticated %}
       {% if user.is_superuser %}
       <a class="btn btn-info" href="{% url 'super_menue_tickets' %}" style="margin:10px;">SUPER_MENUE_TICKETS</a>
-      <a class="btn btn-info" href="{% url 'super_menue_tickets' %}" style="margin:10px;">SUPER_MENUE_USERS</a>
+      <a class="btn btn-info" href="{% url 'super_menue_users' %}" style="margin:10px;">SUPER_MENUE_USERS</a>
       {% endif %}
           <a style="margin:10px;" >Hi, {{ request.user.username|upper }}</a>
       <a class="btn btn-info" href="/logout_request" style="margin:10px;">Logout</a>
