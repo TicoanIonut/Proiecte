@@ -4,6 +4,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import render, redirect
 from .forms import *
 from .models import *
+from django.core.paginator import Paginator
 
 
 @login_required
@@ -116,6 +117,21 @@ def active_users(request, user_id):
 def index(request):
 	tickets = Ticket.objects.order_by('-created_at')
 	return render(request, 'index.html', {'tickets': tickets})
+
+
+@login_required
+def index_search(request):
+	if request.method == "POST":
+		searched = request.POST['searched']
+		tickets = Ticket.objects.filter(title__icontains=searched) or \
+		          Ticket.objects.filter(compartment__icontains=searched) or \
+		          Ticket.objects.filter(id__icontains=searched) or \
+		          Ticket.objects.filter(created_at__icontains=searched) or \
+		          Ticket.objects.filter(updated_at__icontains=searched) or \
+		          Ticket.objects.filter(status__icontains=searched)
+		return render(request, 'index_search.html', {'tickets': tickets, 'searched': searched})
+	else:
+		return render(request, 'index_search.html', {})
 
 
 @login_required
