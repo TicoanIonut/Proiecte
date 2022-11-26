@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% block title %} Tickets Searched {% endblock %}
+{% block content %}
+{% if searched %}
+<table class="styled-table" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1">
+    <thead>
+    <tr>
+        <th>Ticket</th>
+        <th>Created by</th>
+        <th>Summary</th>
+        <th>Status</th>
+        <th>To Compartment</th>
+        <th>Created</th>
+        <th>Last Updated</th>
+        <th>Edit Ticket</th>
+        <th>Delete Ticket</th>
+        {% if user.is_superuser %}
+        <th>Super Delete</th>
+        {% endif %}
+    </tr>
+    </thead>
+
+    {% if user.is_authenticated %}
+    <tbody>
+    {% for ticket in tickets %}
+    {% if user.usercreate.compartment == ticket.compartment or user.is_superuser %}
+    {% if ticket.active == True %}
+    <tr>
+        <td><a href="/ticket/{{ticket.id}}">{{ticket.id}}</a></td>
+        <td><a href="/ticket/{{ticket.id}}">{{ticket.assignee}}</a></td>
+        <td><a href="/ticket/{{ticket.id}}">{{ticket.title}}</a></td>
+        <td><a href="/ticket/{{ticket.id}}">{{ticket.status}}</a></td>
+        <td><a href="/ticket/{{ticket.id}}">{{ticket.compartment}}</a></td>
+        <td><a href="/ticket/{{ticket.id}}">{{ticket.created_at}}</a></td>
+        <td><a href="/ticket/{{ticket.id}}">{{ticket.updated_at}}</a></td>
+        <td><a href="{% url 'EditTicket' ticket.id %}" style="margin:10px;" class="btn btn-info">Edit</a></td>
+        <td><a href="{% url 'InactiveTicket' ticket.id %}" style="margin:10px;" class="btn btn-info">Delete</a></td>
+         {% if user.is_superuser %}
+        <td><a href="{% url 'DeleteTicket' ticket.id %}" style="margin:10px;" class="btn btn-info">SuperDelete</a></td>
+        {% endif %}
+    </tr>
+    {% endif %}
+    {% endif %}
+    {% endfor %}
+    {% else %}
+    <h2 align="center" class="rainbow-text"><strong>You can Login when the Admin activates your account!!!</strong></h2>
+    </tbody>
+
+    {% endif %}
+</table>
+{% endif %}
+{% endblock %}

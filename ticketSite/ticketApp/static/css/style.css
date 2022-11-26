@@ -26,6 +26,15 @@
 .header-right {
   float: right;
 }
+.d-flex {
+  float: left;
+  width: 500px;
+  text-align: center;
+  font-family: sans-serif;
+  line-height: 25px;
+  padding: 6px;
+
+}
 
 @media screen and (max-width: 500px) {
   .header a {
