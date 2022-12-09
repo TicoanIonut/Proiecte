@@ -4,7 +4,6 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import render, redirect
 from .forms import *
 from .models import *
-from django.core.paginator import Paginator
 
 
 @login_required
@@ -34,14 +33,14 @@ def create_ticket(request):
 def edit_ticket(request, ticket_id):
 	ticket = Ticket.objects.get(pk=ticket_id)
 	if request.user.is_superuser:
-		form = CreateTicketFormAdmin(request.POST)
+		form = CreateTicketFormAdmin(request.POST or None, request.FILES or None, instance=ticket)
 		if form.is_valid():
 			form.save()
 			return redirect('index')
 		return render(request, 'EditTicket.html', {'ticket': ticket, 'form': form})
 	else:
 		if request.user == ticket.assignee or request.user.usercreate.compartment == ticket.compartment:
-			form = CreateTicketForm(request.POST or None, instance=ticket)
+			form = CreateTicketForm(request.POST or None, request.FILES or None, instance=ticket)
 			if form.is_valid():
 				form.save()
 				return redirect('index')
@@ -50,10 +49,30 @@ def edit_ticket(request, ticket_id):
 
 
 @login_required
+def edit_users(request, user_id):
+	users = User.objects.get(pk=user_id)
+	form = NewAccountForm(request.POST or None, request.FILES or None, instance=users)
+	if request.user.is_superuser:
+		if form.is_valid():
+			form.save()
+			username = form.cleaned_data.get('username')
+			password = form.cleaned_data.get('password')
+			email = form.cleaned_data.get('email')
+			comp = form.cleaned_data.get('compartment')
+			user = form.save()
+			user.set_password(user.password)
+			user.save()
+			return redirect('super_menue_users')
+		return render(request, 'EditUsers.html', {'users': users, 'form': form})
+	return render(request, 'EditUsers.html', {'users': users, 'form': form})
+	
+
+@login_required
 def delete_ticket(request, ticket_id):
 	ticket = Ticket.objects.get(pk=ticket_id)
 	if request.user.is_superuser:
 		ticket.delete()
+		return redirect('super_menue_users')
 	return render(request, 'index.html')
 
 
@@ -62,6 +81,7 @@ def delete_users(request, user_id):
 	users = User.objects.get(pk=user_id)
 	if request.user.is_superuser:
 		users.delete()
+		return redirect('super_menue_users')
 	return render(request, 'super_menue_users.html')
 
 
@@ -89,9 +109,9 @@ def deactivate_ticket(request, ticket_id):
 	
 @login_required
 def deactivate_users(request, user_id):
-	users = UserCreate.objects.get(pk=user_id)
+	users = User.objects.get(pk=user_id)
 	if request.user.is_superuser:
-		users.active = 0
+		users.is_active = False
 		users.save()
 		return redirect('super_menue_users')
 
@@ -108,8 +128,8 @@ def active_ticket(request, ticket_id):
 @login_required
 def active_users(request, user_id):
 	if request.user.is_superuser:
-		users = UserCreate.objects.get(pk=user_id)
-		users.active = 1
+		users = User.objects.get(pk=user_id)
+		users.is_active = True
 		users.save()
 		return redirect('super_menue_users')
 
@@ -169,9 +189,8 @@ def register_request(request):
 			comp = form.cleaned_data.get('compartment')
 			user = form.save()
 			user.set_password(user.password)
+			user.is_active = False
 			user.save()
-			user = authenticate(username=username, password=password, email=email, compartment=comp)
-			login(request, user)
 			return redirect('index')
 	form = NewAccountForm()
 	return render(request, "register_request.html", {"form": form})
@@ -185,7 +204,8 @@ def login_request(request):
 			password = form.cleaned_data.get('password')
 			user = authenticate(username=username, password=password)
 			if user is not None:
-				login(request, user)
+				if UserCreate.active:
+					login(request, user)
 				return redirect('index')
 			else:
 				return redirect('login_request')
