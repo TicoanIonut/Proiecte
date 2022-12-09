@@ -13,6 +13,7 @@
         <th>Date_Joined</th>
         <th>Last_Login</th>
         <th>Is_Active</th>
+        <th>Edit User</th>
         <th>Activate/Deactivate</th>
         <th>Super Delete</th>
         {% endif %}
@@ -31,8 +32,9 @@
         <td><a>{{usr.username}}</a></td>
         <td><a>{{usr.date_joined}}</a></td>
         <td><a>{{usr.last_login}}</a></td>
-        <td><a>{{usr.usercreate.active}}</a></td>
-        {% if usr.usercreate.active == True %}
+        <td><a>{{usr.is_active}}</a></td>
+        <td><a href="{% url 'EditUsers' usr.id %}" style="margin:10px;" class="btn btn-info">Edit</a></td>
+        {% if usr.is_active == True %}
         <td><a href="{% url 'DeactivateUsers' usr.id %}" style="margin:10px;" class="btn btn-warning">Deactivate</a></td>
         {% else %}
         <td><a href="{% url 'ActiveUsers' usr.id %}" style="margin:10px;" class="btn btn-success">Activate</a></td>
