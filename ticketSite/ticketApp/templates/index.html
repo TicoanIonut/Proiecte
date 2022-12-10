@@ -35,7 +35,7 @@
         <td><a href="{% url 'EditTicket' ticket.id %}" style="margin:10px;" class="btn btn-info">Edit</a></td>
         <td><a href="{% url 'InactiveTicket' ticket.id %}" style="margin:10px;" class="btn btn-info">Delete</a></td>
          {% if user.is_superuser %}
-        <td><a href="{% url 'DeleteTicket' ticket.id %}" style="margin:10px;" class="btn btn-info">SuperDelete</a></td>
+        <td><a href="{% url 'DeleteTicket' ticket.id %}" style="margin:10px;" class="btn btn-danger">SuperDelete</a></td>
         {% endif %}
     </tr>
     {% endif %}
