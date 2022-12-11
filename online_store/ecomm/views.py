@@ -1,5 +1,6 @@
 from django.http import HttpResponseRedirect
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
+from django.views import View
 from django.views.generic import TemplateView
 from .models import *
 
@@ -57,7 +58,7 @@ class AddToCartView(TemplateView):
 				cartproduct.save()
 				return redirect('ecomm:home')
 			else:
-				cartproduct = CartProduct.objects.create(cart=cart_obj, product=product_obj, rate=product_obj.price,
+				cartproduct = CartProduct.objects.create(cart=cart_obj, product=product_obj, price=product_obj.price,
 				                                         quantity=1, subtotal=product_obj.price)
 				cart_obj.total += product_obj.price
 				cart_obj.save()
@@ -65,12 +66,35 @@ class AddToCartView(TemplateView):
 		else:
 			cart_obj = Cart.objects.create(total=0)
 			self.request.session['cart_id'] = cart_obj.id
-			cartproduct = CartProduct.objects.create(cart=cart_obj, product=product_obj, rate=product_obj.price,
+			cartproduct = CartProduct.objects.create(cart=cart_obj, product=product_obj, price=product_obj.price,
 			                                         quantity=1, subtotal=product_obj.price)
 			cart_obj.total += product_obj.price
 			cart_obj.save()
 		return super(AddToCartView, self).dispatch(request, *args, **kwargs)
-	
+
+
+class ManageCartView(View):
+	def get(self, request, *args, **kwargs):
+		cp_id = self.kwargs["cp_id"]
+		action = request.GET.get('action')
+		cp_obj = CartProduct.objects.get(id=cp_id)
+		cart_obj = cp_obj.cart
+		if action == "inc":
+			cp_obj.quantity += 1
+			cp_obj.subtotal += cp_obj.price
+			cp_obj.save()
+			cart_obj.total += cp_obj.price
+			cart_obj.save()
+		elif action == "dcr":
+			cp_obj.quantity -= 1
+			cp_obj.subtotal -= cp_obj.price
+			cp_obj.save()
+			cart_obj.total -= cp_obj.price
+			cart_obj.save()
+			if cp_obj.quantity == 0:
+				cp_obj.delete()
+		return redirect('ecomm:mycart')
+
 	
 class MyCartView(TemplateView):
 	template_name = "mycart.html"
@@ -84,5 +108,6 @@ class MyCartView(TemplateView):
 			cart = None
 		context['cart'] = cart
 		return context
+	
 	
 	

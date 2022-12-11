@@ -38,12 +38,12 @@ class Cart(models.Model):
 class CartProduct(models.Model):
 	cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
 	product = models.ForeignKey(Product, on_delete=models.CASCADE)
-	rate = models.PositiveIntegerField()
+	price = models.PositiveIntegerField()
 	quantity = models.PositiveIntegerField()
 	subtotal = models.PositiveIntegerField()
 	
 	def __str__(self):
-		return	'Cart' + str(self.cart.id) + 'CartProduct: ' + str(self.id)
+		return 'Cart' + str(self.cart.id) + 'CartProduct: ' + str(self.id)
 	
 	
 class Order(models.Model):
