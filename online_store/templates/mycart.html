@@ -6,6 +6,9 @@
 		<div class="col-lg-12" >
 			<div class="box-element" style="background-color: #fff;" >
 				<a  class="btn btn-outline-dark" href="{% url 'ecomm:home' %}">&#x2190; Continue Shopping</a>
+				{% if cart.cartproduct_set.all %}
+				<a style="float:right; margin:5px;" class="btn btn-outline-dark" href="{% url 'ecomm:emptycart'%}">Empty Cart</a>
+				{% endif %}
 				<br>
 				<br>
 				<table class="table" >
