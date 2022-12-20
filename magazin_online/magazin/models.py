@@ -39,15 +39,6 @@ class Comanda(models.Model):
 		return str(self.id)
 	
 	@property
-	def livrare(self):
-		livrare = False
-		comandaitems = self.comandaprodus_set.all()
-		for i in comandaitems:
-			if i.produs.digital == False:
-				livrare = True
-		return livrare
-	
-	@property
 	def get_cart_total(self):
 		comandaitems = self.comandaprodus_set.all()
 		total = sum([produs.get_total for produs in comandaitems])

@@ -4,6 +4,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import render, redirect
 from .forms import *
 from .models import *
+from django.db.models import Q
 
 
 @login_required
@@ -143,12 +144,9 @@ def index(request):
 def index_search(request):
 	if request.method == "POST":
 		searched = request.POST['searched']
-		tickets = Ticket.objects.filter(title__icontains=searched) or \
-		          Ticket.objects.filter(compartment__icontains=searched) or \
-		          Ticket.objects.filter(id__icontains=searched) or \
-		          Ticket.objects.filter(created_at__icontains=searched) or \
-		          Ticket.objects.filter(updated_at__icontains=searched) or \
-		          Ticket.objects.filter(status__icontains=searched)
+		tickets = Ticket.objects.filter(Q(title__icontains=searched) | Q(compartment__icontains=searched) |
+		                                Q(id__icontains=searched) | Q(created_at__icontains=searched) |
+		                                Q(updated_at__icontains=searched) | Q(status__icontains=searched))
 		return render(request, 'index_search.html', {'tickets': tickets, 'searched': searched})
 	else:
 		return render(request, 'index_search.html', {})
