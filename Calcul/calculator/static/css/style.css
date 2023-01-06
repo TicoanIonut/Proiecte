@@ -1,34 +1,78 @@
-.calculator {
+#calculator {
+  width: 240px;
+  height: 320px;
+  border: 2px solid #333;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+#calculator .output {
+  width: 100%;
+  height: 25%;
+  background-color: #ddd;
+  font-size: 2em;
+  text-align: right;
+  padding: 0 20px;
+  box-sizing: border-box;
+}
+
+#calculator .output .result {
+  display: block;
+  margin: 0;
+  padding-top: 20px;
+  color: #333;
+}
+
+#calculator .buttons {
+  width: 100%;
+  height: 50%;
   display: flex;
   flex-wrap: wrap;
-  width: 250px;
-  height: 300px;
-  border: 1px solid black;
+  font-size: 1.5em;
 }
 
-.display {
-  flex: 1;
-  height: 50px;
-  font-size: 20px;
-  text-align: right;
-  padding: 10px;
-  box-sizing: border-box;
-  border: 1px solid black;
-}
-
-.btn {
-  flex: 1;
-  font-size: 20px;
-  height: 50px;
-  border: 1px solid black;
-  box-sizing: border-box;
+#calculator .buttons button {
+  width: 25%;
+  height: 25%;
+  border: none;
+  background-color: #fff;
+  color: #333;
   cursor: pointer;
 }
 
-.operator {
-  background-color: lightgray;
+
+
+#calculator .buttons .clear{
+  width: 50%;
 }
 
-.equal {
-  background-color: lightgreen;
+#calculator .buttons .negative,
+#calculator .buttons .percentage,
+ #calculator .buttons .operator{
+  background-color: #ddd;
+}
+
+#calculator .buttons .equal,
+#calculator .buttons .clear{
+  background-color: #dde;
+
+}
+
+#calculator .buttons .number:hover {
+  background-color: #dde;
+}
+#calculator .buttons .number,
+#calculator .buttons .decimal{
+background-color: #fff
+}
+
+#calculator .buttons .operator:hover,
+#calculator .buttons .negative:hover,
+#calculator .buttons .percentage:hover {
+  background-color: #eee;
+}
+
+#calculator .buttons .clear:hover,
+#calculator .buttons .equal:hover{
+  background-color: #edd;
 }

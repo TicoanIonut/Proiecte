@@ -2,10 +2,6 @@
 {% load static %}
   {% block content %}
 
-
-
-<h1>Social</h1>
-<br/><br/>
 <h1>Calculator work in progress....</h1>
 <form action="result">
     <input type="number" name="no1" placeholder="input number1"/>
@@ -18,27 +14,35 @@
 <br/>
 <br/>
 
-<div class="calculator">
-  <div class="display">CALCULATOR</div>
-  <button class="btn">CE</button>
-  <button class="btn">C</button>
-  <button class="btn">DEL</button><br/>
-  <button class="btn">7</button>
-  <button class="btn">8</button>
-  <button class="btn">9</button><br/>
-  <button class="btn">4</button>
-  <button class="btn">5</button>
-  <button class="btn">6</button><br/>
-  <button class="btn">1</button>
-  <button class="btn">2</button>
-  <button class="btn">2</button><br/>
-  <button class="btn operator">×</button>
-  <button class="btn operator">+</button>
-  <button class="btn operator">-</button>
-  <button class="btn">0</button>
-  <button class="btn">.</button>
-  <button class="btn equal">=</button>
-  <button class="btn operator">÷</button>
+<div id="calculator">
+  <div class="output">
+    <span class="result">0</span>
+  </div>
+  <div class="buttons">
+    <button class="clear">AC</button>
+    <button class="clear">DEL</button>
+    <button class="number">7</button>
+    <button class="number">8</button>
+    <button class="number">9</button>
+    <button class="operator">//</button>
+    <button class="number">4</button>
+    <button class="number">5</button>
+    <button class="number">6</button>
+    <button class="operator">/</button>
+    <button class="number">1</button>
+    <button class="number">2</button>
+    <button class="number">3</button>
+    <button class="operator">*</button>
+    <button class="number">0</button>
+    <button class="decimal">.</button>
+    <button class="equal">=</button>
+    <button class="operator">-</button>
+    <button class="negative">+/-</button>
+    <button class="negative">**</button>
+    <button class="percentage">%</button>
+    <button class="operator">+</button>
+  </div>
 </div>
+
 
  {% endblock %}
