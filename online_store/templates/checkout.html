@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %}Checkout{% endblock %}
+{% block content %}
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="box-element" id="form-wrapper" style="background-color: #fff;">
+            <form id="form" action="" method="POST">
+                <h3>Order Details:</h3>
+                {% csrf_token %}
+                {{form.as_p}}
+                <input id="form-button" class="btn btn-info btn-block" type="submit" value="Continue">
+            </form>
+        </div>
+        <br>
+        <div class="box-element hidden" id="payment-info">
+            <small>Card</small>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="box-element" style="background-color: #fff;">
+            <a class="btn btn-outline-dark" href="{% url 'ecomm:mycart' %}">&#x2190; Back to Cart</a>
+            <hr>
+            <h3>Cosul de Cumparaturi</h3>
+            <hr>
+            {% for cp in cart.cartproduct_set.all %}
+            <div class="cart-row">
+                <div style="flex:2"><img class="row-image" src="{{cp.product.image.url}}"></div>
+                <div style="flex:2"><p>{{ cp.product.title }}</p></div>
+                <div style="flex:1"><p>{{ cp.product.price|floatformat:2 }} $</p></div>
+                <div style="flex:1"><p>{{ cp.quantity }}</p></div>
+            </div>
+            {% endfor %}
+            <h5>Products: {{ cart.get_cart_items }}</h5>
+            <h5>Total: {{ cart.total|floatformat:2 }} $</h5>
+
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

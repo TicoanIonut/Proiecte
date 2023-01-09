@@ -32,6 +32,9 @@ class Cart(models.Model):
 	def get_cart_items(self):
 		allitems = self.cartproduct_set.all()
 		total = sum([product.quantity for product in allitems])
+		if total == 0:
+			total = 0
+			return total
 		return total
 
 
@@ -53,6 +56,7 @@ class Order(models.Model):
 	mobile = models.CharField(max_length=10)
 	email = models.EmailField(null=True, blank=True)
 	total = models.PositiveIntegerField()
+	subtotal = models.PositiveIntegerField()
 	created_at = models.DateTimeField(auto_now_add=True)
 	
 	def __str__(self):

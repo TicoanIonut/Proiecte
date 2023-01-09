@@ -1,7 +1,8 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render
-from django.views import View
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, View, CreateView
+from django.urls import reverse_lazy
+from .forms import CheckoutForm
 from .models import *
 
 
@@ -120,3 +121,35 @@ class EmptyCartView(View):
 			cart.save()
 		return redirect("ecomm:mycart")
 	
+	
+class CheckoutView(CreateView):
+	template_name = "checkout.html"
+	form_class = CheckoutForm
+	success_url = reverse_lazy('ecomm:home')
+	
+	def get_context_data(self, **kwargs):
+		context = super(CheckoutView, self).get_context_data(**kwargs)
+		cart_id = self.request.session.get('cart_id', None)
+		if cart_id:
+			cart_obj = Cart.objects.get(id=cart_id)
+		else:
+			cart_obj = None
+		context['cart'] = cart_obj
+		return context
+	
+	def form_valid(self, form):
+		cart_id = self.request.session.get('cart_id')
+		if cart_id:
+			cart_obj = Cart.objects.get(id=cart_id)
+			form.instance.cart = cart_obj
+			form.instance.subtotal = cart_obj.total
+			form.instance.total = cart_obj.total
+			del self.request.session['cart_id']
+		else:
+			return redirect('ecomm:home')
+		return super().form_valid(form)
+		
+		
+		
+		
+		
