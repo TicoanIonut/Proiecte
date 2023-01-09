@@ -1,8 +1,8 @@
-{% load static %}
+
 <html>
 <head>
     <title>{% block title %}Ecomm{% endblock %}</title>
-
+{% load static %}
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1"/>
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
@@ -24,7 +24,7 @@
             </li>
         </ul>
         <form class="d-flex" method="POST" action="" style="margin-top:1%;">
-            <input class="form-control me-2" type="search" placeholder="Cauta produs" aria-label="Search"
+            <input class="form-control me-2" type="search" placeholder="Search Product" aria-label="Search"
                    style="margin:10px; border-radius: 5px;" name="cauta">
             <button class="btn btn-info" type="submit" style="margin:10px; border-radius: 5px;">Search</button>
         </form>

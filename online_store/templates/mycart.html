@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load static %}
+
 {% block title %}Cart{% endblock %}
 {% block content %}
 	<div class="row" >
@@ -16,7 +16,9 @@
 						<th><h5>Total Products: <strong>{{ cart.get_cart_items }}</strong></h5></th>
 						<th><h5>Total Order: <strong>{{ cart.total|floatformat:2 }} $</strong></h5></th>
 						<th>
-							<a  style="float:right; margin:5px;" class="btn btn-info" href="">Order</a>
+							{% if cart.cartproduct_set.all %}
+							<a  style="float:right; margin:5px;" class="btn btn-info" href="{% url 'ecomm:checkout' %}">Order</a>
+							{% endif %}
 						</th>
 					</tr>
 				</table>
@@ -42,6 +44,7 @@
                             <a href="{% url 'ecomm:managecart' cp.id %}?action=dcr" class="btn btn-info"> - </a>
 						</div>
 						</div>
+
 					<div style="flex:1"><p>{{ cp.subtotal|floatformat:2 }} $</p></div>
 				</div>
 				{% endfor %}
