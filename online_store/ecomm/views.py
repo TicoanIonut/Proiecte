@@ -2,7 +2,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.views.generic import TemplateView, View, CreateView
 from django.urls import reverse_lazy
-from .forms import CheckoutForm
+from .forms import CheckoutForm, CustomerRegistrationForm
 from .models import *
 
 
@@ -94,6 +94,12 @@ class ManageCartView(View):
 			cart_obj.save()
 			if cp_obj.quantity == 0:
 				cp_obj.delete()
+		elif action == "rmv":
+			cart_obj.total -= cp_obj.subtotal
+			cart_obj.save()
+			cp_obj.delete()
+		else:
+			pass
 		return redirect('ecomm:mycart')
 
 	
@@ -148,6 +154,12 @@ class CheckoutView(CreateView):
 		else:
 			return redirect('ecomm:home')
 		return super().form_valid(form)
+	
+	
+class CustomerRegistrationView(CreateView):
+	template_name = 'customerregistration.html'
+	form_class = CustomerRegistrationForm
+	success_url = reverse_lazy('ecomm:home')
 		
 		
 		

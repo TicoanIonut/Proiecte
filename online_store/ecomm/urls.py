@@ -10,5 +10,6 @@ urlpatterns = [
 	path('managecart/<int:cp_id>/', ManageCartView.as_view(), name='managecart'),
 	path('emptycart/', EmptyCartView.as_view(), name='emptycart'),
 	path('checkout/', CheckoutView.as_view(), name='checkout'),
+	path('register/', CustomerRegistrationView.as_view(), name='customerregistration'),
 	
 ]

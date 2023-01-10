@@ -31,23 +31,24 @@
 					<div style="flex:1"><strong>Price</strong></div>
 					<div style="flex:1"><strong>Quantity</strong></div>
 					<div style="flex:1"><strong>Total</strong></div>
+
 				</div>
 				{% for cp in cart.cartproduct_set.all %}
 				<div class="cart-row">
-					<div style="flex:2"><img class="row-image" src="{{cp.product.image.url}}"></div>
-					<div style="flex:2"><p>{{ cp.product.title }}</p></div>
-					<div style="flex:1"><p>{{ cp.product.price|floatformat:2 }} $</p></div>
+					<div style="flex:2"><img class="row-image" src="{{cp.product.image.url}}" href="{% url 'ecomm:productdetail' cp.id %}"></div>
+					<div style="flex:2"><h5>{{ cp.product.title }}</h5></div>
+					<div style="flex:1"><h5>{{ cp.product.price|floatformat:2 }} $</h5></div>
 					<div style="flex:1">
 						<p class="quantity">{{ cp.quantity }}</p>
 						<div class="quantity">
 							<a href="{% url 'ecomm:managecart' cp.id %}?action=inc" class="btn btn-info"> + </a>
                             <a href="{% url 'ecomm:managecart' cp.id %}?action=dcr" class="btn btn-info"> - </a>
+                            <a href="{% url 'ecomm:managecart' cp.id %}?action=rmv" class="btn btn-info"> x </a>
 						</div>
 						</div>
-
-					<div style="flex:1"><p>{{ cp.subtotal|floatformat:2 }} $</p></div>
+					<div style="flex:1"><h6>{{ cp.subtotal|floatformat:2 }} $</h6></div>
 				</div>
-				{% endfor %}
+			{% endfor %}
 			</div>
 		</div>
 	</div>
