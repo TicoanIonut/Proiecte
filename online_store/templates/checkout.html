@@ -21,15 +21,18 @@
     <div class="col-lg-6">
         <div class="box-element" style="background-color: #fff;">
             <a class="btn btn-outline-dark" href="{% url 'ecomm:mycart' %}">&#x2190; Back to Cart</a>
+            {% if cart.cartproduct_set.all %}
+				<a style="float:right;" class="btn btn-outline-dark" href="{% url 'ecomm:emptycart'%}">Empty Cart</a>
+				{% endif %}
             <hr>
-            <h3>Cosul de Cumparaturi</h3>
+            <h3>Shopping Cart</h3>
             <hr>
             {% for cp in cart.cartproduct_set.all %}
             <div class="cart-row">
                 <div style="flex:2"><img class="row-image" src="{{cp.product.image.url}}"></div>
-                <div style="flex:2"><p>{{ cp.product.title }}</p></div>
-                <div style="flex:1"><p>{{ cp.product.price|floatformat:2 }} $</p></div>
-                <div style="flex:1"><p>{{ cp.quantity }}</p></div>
+                <div style="flex:2"><h6>{{ cp.product.title }}</h6></div>
+                <div style="flex:1"><h6>{{ cp.product.price|floatformat:2 }} $</h6></div>
+                <div style="flex:1"><h6>{{ cp.quantity }}</h6></div>
             </div>
             {% endfor %}
             <h5>Products: {{ cart.get_cart_items }}</h5>
