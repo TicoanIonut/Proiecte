@@ -95,8 +95,6 @@ class ManageCartView(View):
 			if cp_obj.quantity == 0:
 				cp_obj.delete()
 		elif action == "rmv":
-			cart_obj.total -= cp_obj.subtotal
-			cart_obj.save()
 			cp_obj.delete()
 		else:
 			pass

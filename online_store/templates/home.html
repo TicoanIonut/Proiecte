@@ -6,8 +6,10 @@
 <div class="row">
     {% for p in products %}
     <div class="col-lg-3" style=" background-color: #fff;">
+        <a href="{% url 'ecomm:productdetail' p.slug %}">
         <img class="thumbnail" src="{{p.image.url}}"  style="object-fit: cover; object-fit: contain; background-color: #fff;">
-        <div class="box-element product" style="background-color: #fff;">
+        </a>
+            <div class="box-element product" style="background-color: #fff;">
             <h6><a href="{% url 'ecomm:productdetail' p.slug %}" style="color: 0000;"><strong>{{ p.title }} </strong></a></h6>
             <hr>
             <a  href="{% url 'ecomm:addtocart' p.id %}" class="btn btn-outline-secondary add-btn update-cart" >Add to cart</a>
