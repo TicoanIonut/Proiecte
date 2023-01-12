@@ -35,7 +35,7 @@
 				</div>
 				{% for cp in cart.cartproduct_set.all %}
 				<div class="cart-row">
-					<div style="flex:2"><img class="row-image" src="{{cp.product.image.url}}" href="{% url 'ecomm:productdetail' cp.id %}"></div>
+					<div style="flex:2"><img class="row-image" src="{{cp.product.image.url}}" ></div>
 					<div style="flex:2"><h5>{{ cp.product.title }}</h5></div>
 					<div style="flex:1"><h5>{{ cp.product.price|floatformat:2 }} $</h5></div>
 					<div style="flex:1">

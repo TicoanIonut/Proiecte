@@ -3,10 +3,11 @@
   {% block content %}
 
 <h1>Calculator work in progress....</h1>
+<a class="btn btn-primary" href="{% url 'calc' %}" ><h4>CALC</h4></a>
 <form action="result">
     <input type="number" name="no1" placeholder="input number1"/>
     <input type="number" name="no2" placeholder="input number2"/>
-    <input type="submit"/>
+    <input type="submit" name="add"/>
 </form>
 <h1>{{ answer }}</h1>
 <br/>

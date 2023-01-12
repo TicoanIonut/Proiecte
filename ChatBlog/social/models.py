@@ -18,7 +18,7 @@ class Profile(models.Model):
 	
 	
 # create profile for new users
-@receiver(post_save, sender=User)
+# @receiver(post_save, sender=User)
 def create_profile(sender, instance, created, **kwargs):
 	if created:
 		user_profile = Profile(user=instance)
@@ -28,4 +28,4 @@ def create_profile(sender, instance, created, **kwargs):
 		user_profile.save()
 
 
-# post_save.connect(create_profile, sender=User)
+post_save.connect(create_profile, sender=User)

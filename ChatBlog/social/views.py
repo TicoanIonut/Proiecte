@@ -1,13 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from .models import *
-
-
-def result(request):
-	no1 = int(request.GET.get('no1'))
-	no2 = int(request.GET.get('no2'))
-	answer = no1 + no2
-	return render(request, 'home.html', {'answer': answer})
+from .models import Profile
 
 
 def home(request):
@@ -23,3 +16,10 @@ def profile_list(request):
 		return redirect('home')
 
 
+def profile(request, pk):
+	if request.user.is_authenticated:
+		profile = Profile.objects.get(user_id=pk)
+		return render(request, 'profile.html', {'profile': profile})
+	else:
+		messages.success(request, ('You must be logged in in order to view Profiles'))
+		return redirect('home')
