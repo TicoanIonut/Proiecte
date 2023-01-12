@@ -2,17 +2,17 @@
 {% load static %}
   {% block content %}
 <body>
-    <center><h1>Calculator</h1></center>
-    <div class="row mt-5">
-        <div class="col-1"></div>
-        <div class="col-2 shadow">
-            <h3>Result</h3>
-            <br><br><br>
-            <h4>{{res}}</h4>
+  <h1 style="margin-left:38%;">Calculator</h1>
+    <div class="row mt-4">
+        <div class="col-4"></div>
+        <div class="col-3  shadow" style="border-radius:1%; background-color: ded;">
+            <div class="col-12 shadow" style="border-radius:3%; margin-top:3%;">
+            <h3 align="center" >Result</h3>
+            <br>
+            <h6>{{res}}</h6>
+                <br>
         </div>
-        <div class="col-1"></div>
-        <div class="col-6  shadow">
-            <form method="POST">
+            <br><form method="POST">
                 {% csrf_token %}
                 <div class="form-group">
                   <label>Number 1</label>
@@ -21,15 +21,17 @@
                 <div class="form-group">
                   <label >Number 2</label>
                   <input type="number" class="form-control" name="num2" >
-                </div>
-                <br><button type="submit" name="add" class="btn btn-primary col-4">Addition</button>
-                <button type="submit" name="sub" class="btn btn-primary col-4">Subtract</button><br>
-                <br><button type="submit" name="div" class="btn btn-primary col-4">Divide</button>
-                <button type="submit" name="mul" class="btn btn-primary col-4">Multiply</button>
-                <br><button type="submit" name="pow" class="btn btn-primary col-4">Power</button>
-                <button type="submit" name="fdiv" class="btn btn-primary col-4">fDivide</button>
-                <button type="submit" name="rem" class="btn btn-primary col-4">Remainder</button>
-              <br></form>
+
+                </div><br>
+
+                <button type="submit" style="margin:4%;" name="add" class="btn btn-primary col-5">Addition</button>
+                <button type="submit" style="margin:3%;" name="sub" class="btn btn-primary col-5">Subtract</button>
+                <button type="submit" style="margin:4%;" name="div" class="btn btn-primary col-5">Divide</button>
+                <button type="submit" style="margin:3%;" name="fdiv" class="btn btn-primary col-5">fDivide</button>
+                <button type="submit" style="margin:4%;" name="mul" class="btn btn-primary col-5">Multiply</button>
+                <button type="submit" style="margin:3%;" name="pow" class="btn btn-primary col-5">Power</button>
+                <button type="submit" style="margin:4%;" name="rem" class="btn btn-primary col-11">Remainder</button>
+              </form>
         </div>
 
     </div>
