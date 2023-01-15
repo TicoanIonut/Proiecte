@@ -14,7 +14,7 @@
 				<table class="table" >
 					<tr>
 						<th><h5>Total Products: <strong>{{ cart.get_cart_items }}</strong></h5></th>
-						<th><h5>Total Order: <strong>{{ cart.total|floatformat:2 }} $</strong></h5></th>
+						<th><h5>Total Order: <strong>{{ cart.get_cart_total|floatformat:2 }} $</strong></h5></th>
 						<th>
 							{% if cart.cartproduct_set.all %}
 							<a  style="float:right; margin:5px;" class="btn btn-info" href="{% url 'ecomm:checkout' %}">Order</a>

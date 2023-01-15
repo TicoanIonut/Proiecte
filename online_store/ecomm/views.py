@@ -1,8 +1,9 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render
-from django.views.generic import TemplateView, View, CreateView
+from django.views.generic import TemplateView, View, CreateView, FormView
 from django.urls import reverse_lazy
-from .forms import CheckoutForm, CustomerRegistrationForm
+from .forms import CheckoutForm, CustomerRegistrationForm, CustomerLoginForm
+from django.contrib.auth import authenticate, login, logout
 from .models import *
 
 
@@ -131,6 +132,13 @@ class CheckoutView(CreateView):
 	form_class = CheckoutForm
 	success_url = reverse_lazy('ecomm:home')
 	
+	def dispatch(self, request, *args, **kwargs):
+		if request.user.is_authenticated and request.user.customer:
+			pass
+		else:
+			return redirect('/login/?next=checkout/')
+		return super().dispatch(request, *args, **kwargs)
+		
 	def get_context_data(self, **kwargs):
 		context = super(CheckoutView, self).get_context_data(**kwargs)
 		cart_id = self.request.session.get('cart_id', None)
@@ -155,11 +163,55 @@ class CheckoutView(CreateView):
 	
 	
 class CustomerRegistrationView(CreateView):
-	template_name = 'customerregistration.html'
+	template_name = "customerregistration.html"
 	form_class = CustomerRegistrationForm
-	success_url = reverse_lazy('ecomm:home')
+	success_url = reverse_lazy("ecomm:home")
+
+	def form_valid(self, form):
+		username = form.cleaned_data.get("username")
+		password = form.cleaned_data.get("password")
+		email = form.cleaned_data.get("email")
+		user = User.objects.create_user(username, email, password)
+		form.instance.user = user
+		login(self.request, user)
+		return super().form_valid(form)
+
+	def get_success_url(self):
+		if "next" in self.request.GET:
+			next_url = self.request.GET.get("next")
+			return next_url
+		else:
+			return self.success_url
 		
 		
+class CustomerLogoutView(View):
+	def get(self, request):
+		logout(request)
+		return redirect('ecomm:home')
+
+
+class CustomerLoginView(FormView):
+	template_name = "customerlogin.html"
+	form_class = CustomerLoginForm
+	success_url = reverse_lazy("ecomm:home")
+
+	def form_valid(self, form):
+		uname = form.cleaned_data.get("username")
+		pword = form.cleaned_data["password"]
+		usr = authenticate(username=uname, password=pword)
+		if usr is not None and Customer.objects.filter(user=usr).exists():
+			login(self.request, usr)
+		else:
+			return render(self.request, self.template_name, {"form": self.form_class, "error": "Invalid credentials"})
+	
+		return super().form_valid(form)
+	
+	def get_success_url(self):
+		if "next" in self.request.GET:
+			next_url = self.request.GET.get("next")
+			return next_url
+		else:
+			return self.success_url
 		
 		
 		

@@ -12,37 +12,8 @@
 
 </head>
 <body style="background-color: #e6e6e6">
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" href="/">Home</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-            </li>
-        </ul>
-        <form class="d-flex" method="POST" action="" style="margin-top:1%;">
-            <input class="form-control me-2" type="search" placeholder="Search Product" aria-label="Search"
-                   style="margin:10px; border-radius: 5px;" name="cauta">
-            <button class="btn btn-info" type="submit" style="margin:10px; border-radius: 5px;">Search</button>
-        </form>
-        <div class="form-inline my-2 my-lg-0" style="margin-top:1%;">
+{% include 'navbar.html' %}
 
-            <span style="color:#ffff">Hi, </span>
-            <a class="btn btn-info" href="" style="margin:10px; border-radius: 5px;">Logout</a>
-
-            <a href="" class="btn btn-info" style="margin:10px; border-radius: 5px;">Login</a>
-
-            <a href="{% url 'ecomm:customerregistration' %}" class="btn btn-info" style="margin:10px; border-radius: 5px;">New User</a>
-            <a href="{% url 'ecomm:mycart' %}">
-                <img id="cart-icon" src="{% static 'cart.png' %}">
-            </a>
-            <p id="cart-total">{{ cart.get_cart_items }}</p>
-        </div>
-    </div>
-</nav>
 <div class="container" >
     <br>
     {% block content %}

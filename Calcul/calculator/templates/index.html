@@ -9,7 +9,10 @@
             <div class="col-12 shadow" style="border-radius:3%; margin-top:3%;">
             <h3 align="center" >Result</h3>
             <br>
-            <h6>{{res}}</h6>
+            <strong>{{res}}</strong>
+                {% if error %}
+            <strong>{{ error }}</strong>
+            {% endif %}
                 <br>
         </div>
             <br><form method="POST">
