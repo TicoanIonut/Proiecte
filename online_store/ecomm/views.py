@@ -1,10 +1,20 @@
-from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.views.generic import TemplateView, View, CreateView, FormView
 from django.urls import reverse_lazy
 from .forms import CheckoutForm, CustomerRegistrationForm, CustomerLoginForm
 from django.contrib.auth import authenticate, login, logout
 from .models import *
+
+
+class EcomMixin(object):
+	def dispatch(self, request, *args, **kwargs):
+		cart_id = request.session.get("cart_id")
+		if cart_id:
+			cart_obj = Cart.objects.get(id=cart_id)
+			if request.user.is_authenticated and request.user.customer:
+				cart_obj.customer = request.user.customer
+				cart_obj.save()
+		return super().dispatch(request, *args, **kwargs)
 
 
 class HomeView(TemplateView):
