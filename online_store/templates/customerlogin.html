@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}Customer Login{% endblock %}
+{% block content %}
+
+<div class="container">
+<div class="row">
+    <div class="col-lg-6">
+        <h3>Customer Login</h3>
+        <form action="" method="POST">
+        {% csrf_token %}
+            {{form.as_p}}
+            <input id="form-button" class="btn btn-info btn-block" type="submit" value="Login">
+        {% if error %}
+            {{error}}
+            {% endif %}
+        </form>
+        <p class="text-left">Don't have an account? <a href="{%url 'ecomm:customerregistration' %}">Register</a>.</p>
+</div>
+    </div>
+</div>
+{% endblock %}

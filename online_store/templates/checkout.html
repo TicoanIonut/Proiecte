@@ -36,7 +36,7 @@
             </div>
             {% endfor %}
             <h5>Products: {{ cart.get_cart_items }}</h5>
-            <h5>Total: {{ cart.total|floatformat:2 }} $</h5>
+            <h5>Total: {{ cart.get_cart_total|floatformat:2 }} $</h5>
 
         </div>
     </div>

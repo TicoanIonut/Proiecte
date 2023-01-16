@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 class Customer(models.Model):
 	user = models.OneToOneField(User, on_delete=models.CASCADE)
 	full_name = models.CharField(max_length=200)
-	adress = models.CharField(max_length=200, null=True, blank=True)
+	address = models.CharField(max_length=200, null=True, blank=True)
 	joined_on = models.DateTimeField(auto_now_add=True)
 
 
@@ -36,6 +36,12 @@ class Cart(models.Model):
 			total = 0
 			return total
 		return total
+	
+	@property
+	def get_cart_total(self):
+		totalitems = self.cartproduct_set.all()
+		tot = sum([product.get_total for product in totalitems])
+		return tot
 
 
 class CartProduct(models.Model):
@@ -45,6 +51,11 @@ class CartProduct(models.Model):
 	quantity = models.PositiveIntegerField()
 	subtotal = models.PositiveIntegerField()
 	
+	@property
+	def get_total(self):
+		total = self.product.price * self.quantity
+		return total
+	
 	def __str__(self):
 		return 'Cart' + str(self.cart.id) + 'CartProduct: ' + str(self.id)
 	
@@ -52,7 +63,7 @@ class CartProduct(models.Model):
 class Order(models.Model):
 	cart = models.OneToOneField(Cart, on_delete=models.CASCADE)
 	ordered_by = models.CharField(max_length=200)
-	shipping_adress = models.CharField(max_length=200)
+	shipping_address = models.CharField(max_length=200)
 	mobile = models.CharField(max_length=10)
 	email = models.EmailField(null=True, blank=True)
 	total = models.PositiveIntegerField()

@@ -76,3 +76,9 @@ background-color: #fff
 #calculator .buttons .equal:hover{
   background-color: #edd;
 }
+
+.rainbow-text {
+  background-image: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet);
+  -webkit-background-clip: text;
+  color: transparent;
+}
