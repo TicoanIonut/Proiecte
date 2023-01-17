@@ -47,7 +47,7 @@ class Cart(models.Model):
 class CartProduct(models.Model):
 	cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
 	product = models.ForeignKey(Product, on_delete=models.CASCADE)
-	price = models.PositiveIntegerField()
+	rate = models.PositiveIntegerField()
 	quantity = models.PositiveIntegerField()
 	subtotal = models.PositiveIntegerField()
 	

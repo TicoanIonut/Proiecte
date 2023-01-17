@@ -47,44 +47,44 @@ class ProductDetailView(TemplateView):
 		context['cart'] = cart
 		context['product'] = product
 		return context
+
+
+class AddToCartView(EcomMixin, TemplateView):
+	template_name = "home.html"
 	
-	
-class AddToCartView(TemplateView):
-	template_name = 'home.html'
-	
-	def dispatch(self, request, *args, **kwargs):
-		context = super().dispatch(request, **kwargs)
-		context['products'] = Product.objects.all()
+	def get(self, request, *args, **kwargs):
+		context = super().get_context_data(**kwargs)
 		product_id = self.kwargs['pro_id']
 		product_obj = Product.objects.get(id=product_id)
-		cart_id = self.request.session.get('cart_id', None)
+		cart_id = self.request.session.get("cart_id", None)
 		if cart_id:
 			cart_obj = Cart.objects.get(id=cart_id)
-			this_prod_in_cart = cart_obj.cartproduct_set.filter(product=product_obj)
-			if this_prod_in_cart.exists():
-				cartproduct = this_prod_in_cart.last()
+			this_product_in_cart = cart_obj.cartproduct_set.filter(
+				product=product_obj)
+			if this_product_in_cart.exists():
+				cartproduct = this_product_in_cart.last()
 				cartproduct.quantity += 1
 				cartproduct.subtotal += product_obj.price
 				cartproduct.save()
 				cart_obj.total += product_obj.price
-				cartproduct.save()
+				cart_obj.save()
 				return redirect('ecomm:home')
 			else:
-				cartproduct = CartProduct.objects.create(cart=cart_obj, product=product_obj, price=product_obj.price,
-				                                         quantity=1, subtotal=product_obj.price)
+				cartproduct = CartProduct.objects.create(
+					cart=cart_obj, product=product_obj, rate=product_obj.price, quantity=1, subtotal=product_obj.price)
 				cart_obj.total += product_obj.price
 				cart_obj.save()
 				return redirect('ecomm:home')
 		else:
 			cart_obj = Cart.objects.create(total=0)
 			self.request.session['cart_id'] = cart_obj.id
-			cartproduct = CartProduct.objects.create(cart=cart_obj, product=product_obj, price=product_obj.price,
-			                                         quantity=1, subtotal=product_obj.price)
+			cartproduct = CartProduct.objects.create(
+				cart=cart_obj, product=product_obj, rate=product_obj.price, quantity=1, subtotal=product_obj.price)
 			cart_obj.total += product_obj.price
 			cart_obj.save()
-		return super(AddToCartView, self).dispatch(request, *args, **kwargs)
-
-
+		return context
+	
+	
 class ManageCartView(View):
 	def get(self, request, *args, **kwargs):
 		cp_id = self.kwargs["cp_id"]
@@ -93,15 +93,15 @@ class ManageCartView(View):
 		cart_obj = cp_obj.cart
 		if action == "inc":
 			cp_obj.quantity += 1
-			cp_obj.subtotal += cp_obj.price
+			cp_obj.subtotal += cp_obj.rate
 			cp_obj.save()
-			cart_obj.total += cp_obj.price
+			cart_obj.total += cp_obj.rate
 			cart_obj.save()
 		elif action == "dcr":
 			cp_obj.quantity -= 1
-			cp_obj.subtotal -= cp_obj.price
+			cp_obj.subtotal -= cp_obj.rate
 			cp_obj.save()
-			cart_obj.total -= cp_obj.price
+			cart_obj.total -= cp_obj.rate
 			cart_obj.save()
 			if cp_obj.quantity == 0:
 				cp_obj.delete()
@@ -223,5 +223,5 @@ class CustomerLoginView(FormView):
 		else:
 			return self.success_url
 		
-		
-		
+
+
