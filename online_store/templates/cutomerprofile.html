@@ -1,47 +1,48 @@
 {% extends 'base.html' %}
-
 {% block title %}Customer Profile{% endblock %}
 {% block content %}
-<div class="container">
-    <div class="row">
-        <div class="col-md-6">
-            <h3>Detail Information</h3>
+
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="box-element" id="form-wrapper" style="background-color: #fff;">
+            <h3>Detail information:</h3>
+            <hr>
             <p><span class="font-weight-bold">Name: </span>{{ customer.full_name }}</p>
             <p><span class="font-weight-bold">Username: </span>{{ customer.user.username }}</p>
             <p><span class="font-weight-bold">Email: </span>{{ customer.user.email }}</p>
             <p><span class="font-weight-bold">Address: </span>{{ customer.address }}</p>
             <p><span class="font-weight-bold">Joined on: </span>{{ customer.joined_on }}</p>
         </div>
-        <div class="col-md-6">
-            <h3>Previous Order</h3>
-            <hr>
+        <br>
+        <div class="box-element hidden" id="payment-info">
+            <small>Card</small>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="box-element" style="background-color: #fff;">
+            <h3>Previous Orders</h3>
             <table class="table">
                 <thead>
-                <tr>
-                    <th>SN</th>
-                    <th>Order ID</th>
-                    <th>Amount</th>
-                    <th>Ordered on</th>
-
-                </tr>
+                    <tr>
+                        <th>SN</th>
+                        <th>Order ID</th>
+                        <th>Amount</th>
+                        <th>Ordered on</th>
+                    </tr>
                 </thead>
                 <tbody>
-
-                {% for ord in orders %}
-                <tr>
-                    <td>{{forloop.counter}}</td>
-                    <td>#ORDER_{{ord.id}}</td>
-                    <td>{{ord.total}}</td>
-                    <td>{{ord.created_at}}</td>
-
-                </tr>
-                {% endfor %}
-
+                    {% for ord in orders %}
+                    <tr>
+                        <td>{{forloop.counter}}</td>
+                        <td><a href=""> #ORDER_{{ord.id}}</a></td>
+                        <td>{{ord.total}}</td>
+                        <td>{{ord.created_at|timesince}} ago</td>
+                    </tr>
+                    {% endfor %}
                 </tbody>
             </table>
         </div>
     </div>
-
 </div>
-
 {% endblock %}
