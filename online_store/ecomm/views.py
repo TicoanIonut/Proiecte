@@ -51,16 +51,14 @@ class ProductDetailView(TemplateView):
 
 class AddToCartView(EcomMixin, TemplateView):
 	template_name = "home.html"
-	
+
 	def get(self, request, *args, **kwargs):
-		context = super().get_context_data(**kwargs)
 		product_id = self.kwargs['pro_id']
 		product_obj = Product.objects.get(id=product_id)
 		cart_id = self.request.session.get("cart_id", None)
 		if cart_id:
 			cart_obj = Cart.objects.get(id=cart_id)
-			this_product_in_cart = cart_obj.cartproduct_set.filter(
-				product=product_obj)
+			this_product_in_cart = cart_obj.cartproduct_set.filter(product=product_obj)
 			if this_product_in_cart.exists():
 				cartproduct = this_product_in_cart.last()
 				cartproduct.quantity += 1
@@ -82,8 +80,8 @@ class AddToCartView(EcomMixin, TemplateView):
 				cart=cart_obj, product=product_obj, rate=product_obj.price, quantity=1, subtotal=product_obj.price)
 			cart_obj.total += product_obj.price
 			cart_obj.save()
-		return context
-	
+		return redirect('ecomm:home')
+
 	
 class ManageCartView(View):
 	def get(self, request, *args, **kwargs):
@@ -223,5 +221,22 @@ class CustomerLoginView(FormView):
 		else:
 			return self.success_url
 		
-
+		
+class CustomerProfileView(TemplateView):
+	template_name = 'cutomerprofile.html'
+	
+	def dispatch(self, request, *args, **kwargs):
+		if request.user.is_authenticated and request.user.customer:
+			pass
+		else:
+			return redirect('/login/?next=profile/')
+		return super().dispatch(request, *args, **kwargs)
+	
+	def get_context_data(self, **kwargs):
+		context = super().get_context_data(**kwargs)
+		customer = self.request.user.customer
+		context['customer'] = customer
+		orders = Order.objects.filter(cart__customer=customer)
+		context['orders'] = orders
+		return context
 
