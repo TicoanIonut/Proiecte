@@ -12,16 +12,14 @@
         </ul>
         <form class="d-flex" method="POST" action="" style="margin-top:1%;">
             <input class="form-control me-2" type="search" placeholder="Search Product" aria-label="Search"
-                   style="margin:10px; border-radius: 5px;" name="cauta">
-            <button class="btn btn-info" type="submit" style="margin:10px; border-radius: 5px;">Search</button>
+                   style="margin:10px; border-radius: 5px;" name="search">
+            <button class="btn btn-info" type="submit" style="margin:10px; margin-top:10px; border-radius: 5px;">Search</button>
         </form>
         <div class="form-inline my-2 my-lg-0" style="margin-top:1%;">
 
-
-
-
             {% if request.user.customer %}
              <span style="color:#ffff">Hi, {{ request.user.username }} </span>
+            <a class="btn btn-info" href="{% url 'ecomm:customerprofile' %}" style="margin:10px; border-radius: 5px;">My Profile</a>
             <a class="btn btn-info" href="{% url 'ecomm:customerlogout' %}" style="margin:10px; border-radius: 5px;">Logout</a>
             {% else %}
             <a href="{% url 'ecomm:customerlogin' %}" class="btn btn-info" style="margin:10px; border-radius: 5px;">Login</a>
