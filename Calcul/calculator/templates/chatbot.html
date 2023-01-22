@@ -1,0 +1,13 @@
+<h1>Chatbot</h1>
+
+<form method="POST">
+{% csrf_token %}
+<label>Enter your message:</label>
+<input type="text" name="user_input" />
+<button type="submit">Send</button>
+</form>
+
+{% if response %}
+<h2>Chatbot response:</h2>
+<p>{{ response }}</p>
+{% endif %}

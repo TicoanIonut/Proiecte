@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% block title %}Customer order detail{% endblock %}
+{% block content %}
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="box-element" id="form-wrapper" style="background-color: #fff;">
+            <h3>Order Detail:</h3>
+            <hr>
+            <p><span class="font-weight-bold">Order ID: </span> #ORDER_{{ord_obj.id}}</p>
+            <p><span class="font-weight-bold">Ordered on: </span> {{ord_obj.created_at}} ({{ord_obj.created_at|timesince}} ago)</p>
+            <p><span class="font-weight-bold">Customer information: </span> user ({{ord_obj.ordered_by}}), phone ({{ord_obj.mobile}})</p>
+            <p><span class="font-weight-bold">Shipping address: </span> to ({{ord_obj.shipping_address}}), email ({{ord_obj.email}})</p>
+        </div>
+        <br>
+        <div class="box-element hidden" id="payment-info">
+            <small>Card</small>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="box-element" style="background-color: #fff;">
+            <h3>Ordered Items</h3>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>SN</th>
+                        <th>Item</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for cp in ord_obj.cart.cartproduct_set.all %}
+                    <tr>
+                        <td>{{forloop.counter}}</td>
+                        <td><a href="{% url 'ecomm:productdetail' cp.product.slug %}">{{cp.product.title}}</a></td>
+                        <td>{{cp.rate|floatformat:2}}</td>
+                        <td>{{cp.quantity}}</td>
+                        <td>{{cp.subtotal|floatformat:2}}</td>
+                    </tr>
+                    {% endfor %}
+                <tr>
+                        <th colspan="4" class="text-right">Total: </th>
+                        <th>{{ord_obj.total|floatformat:2}} $</th>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
