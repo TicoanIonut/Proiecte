@@ -29,14 +29,16 @@
                         <th>Order ID</th>
                         <th>Amount</th>
                         <th>Ordered on</th>
+                        <th>Since</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for ord in orders %}
                     <tr>
                         <td>{{forloop.counter}}</td>
-                        <td><a href=""> #ORDER_{{ord.id}}</a></td>
+                        <td><a href="{% url 'ecomm:customerorderdetail' ord.pk %}"> #ORDER_{{ord.id}}</a></td>
                         <td>{{ord.total}}</td>
+                        <td>{{ord.created_at}}</td>
                         <td>{{ord.created_at|timesince}} ago</td>
                     </tr>
                     {% endfor %}
