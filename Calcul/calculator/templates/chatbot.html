@@ -1,13 +1,26 @@
-<h1>Chatbot</h1>
+{% extends 'base.html' %}
+{% load static %}
+  {% block content %}
 
-<form method="POST">
-{% csrf_token %}
-<label>Enter your message:</label>
-<input type="text" name="user_input" />
-<button type="submit">Send</button>
-</form>
+<body>
+    <div class="container">
+        <h1 class="text-center mt-4 mb-4">Chatbot</h1>
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <form method="POST" action="{% url 'chatbot' %}" id="chatbot-form">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="user_input">Enter your message:</label>
+                        <input type="text" class="form-control" id="user_input" name="user_input">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Send</button>
+                </form>
+                <div class="mt-4" id="response" style="">
+                    <h3>Chatbot response:</h3>
+                    <h5><p class="lead">{{ response }}</p></h5>
+                </div>
+            </div>
+        </div>
+    </div>
 
-{% if response %}
-<h2>Chatbot response:</h2>
-<p>{{ response }}</p>
-{% endif %}
+ {% endblock %}

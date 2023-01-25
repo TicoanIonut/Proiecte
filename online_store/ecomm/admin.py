@@ -1,4 +1,4 @@
 from django.contrib import admin
 from .models import *
 
-admin.site.register([Customer, Product, Cart, CartProduct, Order])
+admin.site.register([Admin, Customer, Product, Cart, CartProduct, Order])

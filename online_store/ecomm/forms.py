@@ -19,16 +19,19 @@ class CheckoutForm(forms.ModelForm):
 		
 		
 class CustomerRegistrationForm(forms.ModelForm):
-	username = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'username', 'class': 'form-control'}))
-	password = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'password', 'class': 'form-control'}))
-	email = forms.CharField(widget=forms.EmailInput(attrs={'placeholder': 'email', 'class': 'form-control'}))
+	username = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Username', 'class': 'form-control'}))
+	password = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'Password', 'class': 'form-control'}))
+	email = forms.CharField(widget=forms.EmailInput(attrs={'placeholder': 'Email', 'class': 'form-control'}))
 
 	class Meta:
 		model = Customer
 		fields = ["username", "password", "email", "full_name", "address"]
 		widgets = {
-			'full_name': EmailInput(attrs={'placeholder': 'Full Name', 'class': 'form-control'}),
-			'address': PasswordInput(attrs={'placeholder': 'Address', 'class': 'form-control'}),
+			'username': TextInput(attrs={'placeholder': 'Username', 'class': 'form-control'}),
+			'password': PasswordInput(attrs={'placeholder': 'Password', 'class': 'form-control'}),
+			'email': EmailInput(attrs={'placeholder': 'Email', 'class': 'form-control'}),
+			'full_name': TextInput(attrs={'placeholder': 'Full Name', 'class': 'form-control'}),
+			'address': TextInput(attrs={'placeholder': 'Address', 'class': 'form-control'}),
 		}
 	
 	def clean_username(self):
