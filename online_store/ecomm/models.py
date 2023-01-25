@@ -7,6 +7,9 @@ class Admin(models.Model):
 	full_name = models.CharField(max_length=50)
 	image = models.ImageField(upload_to='admins')
 	mobile = models.CharField(max_length=50)
+	
+	def __str__(self):
+		return self.user.username
 
 
 class Customer(models.Model):
