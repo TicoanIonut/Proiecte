@@ -29,8 +29,8 @@
             <hr>
             {% for cp in cart.cartproduct_set.all %}
             <div class="cart-row">
-                <div style="flex:2"><img class="row-image" src="{{cp.product.image.url}}"></div>
-                <div style="flex:2"><h6>{{ cp.product.title }}</h6></div>
+                <div style="flex:2"><a href="{% url 'ecomm:productdetail' cp.product.slug %}"><img class="row-image" src="{{cp.product.image.url}}"></a></div>
+                <div style="flex:2"><h6><a href="{% url 'ecomm:productdetail' cp.product.slug %}" style="color: 0000;">{{ cp.product.title }}</a></h6></div>
                 <div style="flex:1"><h6>{{ cp.product.price|floatformat:2 }} $</h6></div>
                 <div style="flex:1"><h6>{{ cp.quantity }}</h6></div>
             </div>
