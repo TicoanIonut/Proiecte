@@ -15,9 +15,11 @@ urlpatterns = [
 	path('login/', CustomerLoginView.as_view(), name='customerlogin'),
 	path('profile/', CustomerProfileView.as_view(), name='customerprofile'),
 	path("profile/order-<int:pk>/", CustomerOrderDetailView.as_view(), name="customerorderdetail"),
+	
 	path("admin-login/", AdminLoginView.as_view(), name="adminlogin"),
 	path("admin-home/", AdminHomeView.as_view(), name="adminhome"),
-	path("admin-order/<int:pk>/", AdminDetailView.as_view(), name="adminorderdetail"),
+	path("admin-order/<int:pk>/", AdminOrderDetailView.as_view(), name="adminorderdetail"),
 	path("admin-all-orders/", AdminOrderListView.as_view(), name="adminorderlist"),
+	path("admin-order-<int:pk>-change/", AdminOrderStatusChangeView.as_view(), name="adminorderstatuschange"),
 	
 ]

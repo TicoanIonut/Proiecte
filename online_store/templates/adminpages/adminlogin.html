@@ -3,11 +3,7 @@
 {% block title %}Admin Login{% endblock %}
 
 {% block content %}
-<style>
-    .errorlist {
-        color: red;
-    }
-</style>
+
 <div class="container">
     <div class="row">
         <div class="col-md-6 mx-auto">
@@ -18,7 +14,7 @@
                 {{form.as_p}}
                 <button class="btn btn-primary">Login as a Admin</button>
                 {% if error %}
-                <li style="color: red;">{{error}}</li>
+                <li>{{error}}</li>
                 {% endif %}
             </form>
         </div>

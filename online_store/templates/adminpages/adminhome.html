@@ -18,7 +18,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for ord in orders %}
+                    {% for ord in pendingorders %}
                     <tr>
                         <td>{{forloop.counter}}</td>
                         <td><a href="{% url 'ecomm:adminorderdetail' ord.id %}">#ORDER_{{ord.id}}</a></td>
