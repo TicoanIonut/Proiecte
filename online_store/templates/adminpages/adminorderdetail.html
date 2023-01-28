@@ -40,11 +40,11 @@
                     {% endfor %}
                     <tr>
                         <th colspan="4" class="text-right">Total: </th>
-                        <th>$ {{ord_obj.total|floatformat:2}}</th>
+                        <th>$ {{ord_obj.total|floatformat:2}}/-</th>
                     </tr>
                 </tbody>
             </table>
-            <form action="" method="POST">
+            <form action="{% url 'ecomm:adminorderstatuschange' ord_obj.id %}" method="POST">
                 {% csrf_token %}
                 <select name="status">
                     {% for i, j in allstatus %}
