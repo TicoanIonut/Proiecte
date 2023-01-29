@@ -7,11 +7,11 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
-    <div class="container">
-        <a href="{% url 'ecomm:adminhome' %}">Home</a> |
-        <a href="{% url 'ecomm:adminorderlist' %}">All Orders</a> |
-        <a href="">All Products</a> |
-        <a href="{% url 'ecomm:home' %}">Visit site</a>
+    <div class="container" style="margin-top:1%" align="center">
+        <a class="btn btn-outline-dark"  href="{% url 'ecomm:adminhome' %}">Home</a>
+        <a class="btn btn-outline-dark" href="{% url 'ecomm:adminorderlist' %}">All Orders</a>
+        <a class="btn btn-outline-dark" href="">All Products</a>
+        <a class="btn btn-outline-dark" href="{% url 'ecomm:home' %}">Visit site</a>
     </div>
     {% block content %}
 

@@ -214,12 +214,12 @@ class CustomerLoginView(FormView):
 	
 		return super().form_valid(form)
 	
-	def get_success_url(self):
-		if "next" in self.request.GET:
-			next_url = self.request.GET.get("next")
-			return next_url
-		else:
-			return self.success_url
+	# def get_success_url(self):
+	# 	if "next" in self.request.GET:
+	# 		next_url = self.request.GET.get("next")
+	# 		return next_url
+	# 	else:
+	# 		return self.success_url
 		
 		
 class CustomerProfileView(TemplateView):
