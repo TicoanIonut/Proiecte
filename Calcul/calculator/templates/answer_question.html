@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block content %}
+
+
+<div class="container text-center">
+    <div class="row">
+
+
+
+            <div class="col-md-4" >
+                <h1>ChatGPT</h1>
+                <form method="POST" action="{% url 'chatbot' %}" id="chatbot-form">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="user_input">Enter your message:</label>
+                        <input type="text" class="form-control" id="user_input" name="user_input">
+                    </div>
+                    <button type="submit" style="margin-top:3%;" class="btn btn-primary" >Send</button>
+                </form>
+                {% if response %}
+                <p>Response:</p>
+                <div class="mt-4" id="response" style="border: 1px solid #ced4da; border-radius:5px;">
+                    <p style="margin:2%;">{{ response }}</p>
+                </div>
+                {% endif %}
+            </div>
+
+        <div class="col-3">
+            <h1>Questions</h1>
+            <br>
+            {% for qs in rendering %}
+            <div style="border: 1px solid #000; border-radius:5px; margin:1%;">
+                <p>{{ qs.question }}</p>
+                <p>{{ qs.created_at }} by {{ qs.user }}</p>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="col-3">
+            <h1>Answers</h1>
+            <br>
+            {% for ans in rendering %}
+            <div style="border: 1px solid #000; border-radius:5px; margin:1%;">
+                <p>{{ ans.answer }}</p>
+                <p>{{ ans.created_at }} by ChatGPT</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
