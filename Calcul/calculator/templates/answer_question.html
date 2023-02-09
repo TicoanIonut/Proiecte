@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% block title %} ChatbotGPT {% endblock %}
 {% block content %}
 
 
@@ -6,7 +7,7 @@
     <div class="row">
         <div class="col-md-4">
             <h1>ChatGPT</h1>
-            <form method="POST" action="{% url 'chatbot' %}" id="chatbot-form" style="margin-top:4%;">
+            <form method="POST" action="{% url 'chatbot' %}" style="margin-top:4%;">
                 {% csrf_token %}
                 <div class="form-group" align="left">
                     <label for="user_input">Enter your message:</label>
@@ -21,7 +22,9 @@
             </div>
             {% endif %}
         </div>
-        <div class="col-8">
+        <div class="col-2">
+        </div>
+        <div class="col-6">
             <h1>Archive</h1>
             <br>
             {% for obj in rendering %}
@@ -33,24 +36,30 @@
 
             </div>
             {% endfor %}
+            <br/>
+<nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-center">
+        {% if rendering.has_previous %}
+        <li class="page-item"><a class="page-link" href="?page=1">&laquo First</a></li>
+        <li class="page-item"><a class="page-link"
+                                 href="?page={{ rendering.previous_page_number }}">Previous</a></li>
+        {% endif %}
+        {% for i in nums %}
+        <li class="page-item"><a class="page-link" href="?page={{ forloop.counter }}">{{ forloop.counter }}</a>
+        </li>
+        {% endfor %}
+        {% if rendering.has_next %}
+        <li class="page-item"><a class="page-link" href="?page={{ rendering.next_page_number }}">Next</a></li>
+        <li class="page-item"><a class="page-link" href="?page={{ rendering.paginator.num_pages }}">Last
+            &raquo</a></li>
+        {% endif %}
+    </ul>
+</nav>
         </div>
-
     </div>
 </div>
-<nav aria-label="Page navigation example">
-  <ul class="pagination justify-content-center">
-{% if rendering.has_previous %}
-	<li class="page-item"><a class="page-link" href="?page=1">&laquo First</a></li>
-	<li class="page-item"><a class="page-link" href="?page={{ rendering.previous_page_number }}">Previous</a></li>
-{% endif %}
-{% for i in nums %}
-	<li class="page-item"><a class="page-link" href="?page={{ forloop.counter }}">{{ forloop.counter }}</a></li>
-{% endfor %}
-{% if rendering.has_next %}
-	<li class="page-item"><a class="page-link" href="?page={{ rendering.next_page_number }}">Next</a></li>
-	<li class="page-item"><a class="page-link" href="?page={{ rendering.paginator.num_pages }}">Last &raquo</a></li>
-{% endif %}
- </ul>
-</nav>
-<br/>
+
+
+
+
 {% endblock %}
