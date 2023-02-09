@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% block title %} Calculator {% endblock %}
+{% block content %}
+<body>
+<div class="row mt-4">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-4">
+                <h1 align="center">Calculator</h1>
+            </div>
+            <div class="col-8">
+                <h1 align="center">Archive</h1>
+            </div>
+        </div>
+    </div>
+    <div class="col-4" style="border-radius:1%; background-color: ded;">
+        <div class="col-12 shadow" style="border-radius:3%; margin-top:3%;">
+            <h3 align="center">Result</h3>
+            <br>
+            <div style="max-width: 100%; overflow:scroll;">
+                <strong>{{ res }}</strong>
+                {% if error %}
+                <strong>{{ error }}</strong>
+                {% endif %}
+            </div>
+            <br>
+        </div>
+        <br>
+        <form method="POST" action="{% url 'calc' %}">
+            {% csrf_token %}
+            <div class="form-group">
+                <label>Number 1</label>
+                <input type="number" class="form-control" id="num1" name="num1">
+            </div>
+            <div class="form-group">
+                <label>Number 2</label>
+                <input type="number" class="form-control" id="num2" name="num2">
+            </div>
+            <br>
+            <button type="submit" style="margin:4%;" name="add" class="btn btn-primary col-5">Addition</button>
+            <button type="submit" style="margin:3%;" name="sub" class="btn btn-primary col-5">Subtract</button>
+            <button type="submit" style="margin:4%;" name="div" class="btn btn-primary col-5">Divide</button>
+            <button type="submit" style="margin:3%;" name="fdiv" class="btn btn-primary col-5">fDivide</button>
+            <button type="submit" style="margin:4%;" name="mul" class="btn btn-primary col-5">Multiply</button>
+            <button type="submit" style="margin:3%;" name="pow" class="btn btn-primary col-5">Power</button>
+            <button type="submit" style="margin:4%;" name="rem" class="btn btn-primary col-11">Remainder</button>
+        </form>
+    </div>
+
+    <div class="col-2">
+    </div>
+    <div class="col-4">
+        {% for obj in rendering %}
+        <div style="border: 1px solid #000; border-radius:5px; margin:1%;">
+            <p><strong>Operation: </strong>{{ obj.num1 }} {{ obj.symbol }} {{ obj.num2 }}</p>
+
+            <hr>
+            <p><strong>Result: </strong>{{ obj.calc_answer }}</p>
+
+        </div>
+        {% endfor %}
+
+
+        </br>
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+                {% if rendering.has_previous %}
+                <li class="page-item"><a class="page-link" href="?page=1">&laquo First</a></li>
+                <li class="page-item"><a class="page-link"
+                                         href="?page={{ rendering.previous_page_number }}">Previous</a></li>
+                {% endif %}
+                {% for i in nums %}
+                <li class="page-item"><a class="page-link" href="?page={{ forloop.counter }}">{{ forloop.counter }}</a>
+                </li>
+                {% endfor %}
+                {% if rendering.has_next %}
+                <li class="page-item"><a class="page-link" href="?page={{ rendering.next_page_number }}">Next</a></li>
+                <li class="page-item"><a class="page-link" href="?page={{ rendering.paginator.num_pages }}">Last
+                    &raquo</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+</div>
+</body>
+{% endblock %}
