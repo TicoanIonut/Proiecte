@@ -32,7 +32,7 @@
                 <p>{{ obj.question }}</p>
                 <p>{{ obj.created_at }} by {{ qs.user }}</p>
                 <hr>
-                <p>{{ obj.answer }}</p>
+                <p>{{ obj.answer }} <a href="{% url 'delete_resp' obj.id %}" style="float:right; margin-right:1%;" class="btn btn-primary">Delete</a></p>
 
             </div>
             {% endfor %}
