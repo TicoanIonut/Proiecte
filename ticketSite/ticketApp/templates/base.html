@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1"/>
+    <title>{% block title %}Tickets{% endblock %}</title>
+    {% load static %}
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+</head>
+<body>
+<div class="header">
+    <a href="{% url 'index' %}" style="margin:10px;" class="btn btn-info">Tickets</a>
+    {% if user.is_authenticated %}
+    <a href="{% url 'CreateTicket' %}" style="margin:10px;" class="btn btn-info">CreateTicket</a>
+    <form style="margin:10px;" class="d-flex" method=POST action="{% url 'index_search' %}">
+        {% csrf_token %}
+        <input class="form-control me-2" type="search" placeholder="Search Ticket" aria-label="Search" name="searched">
+        <button class="btn btn-info" type="submit">Search</button>
+    </form>
+    {% endif %}
+    <div class="header-right">
+        {% if user.is_authenticated %}
+        {% if user.is_superuser %}
+        <a class="btn btn-info" href="{% url 'super_menue_tickets' %}" style="margin:10px;">SUPER_MENUE_TICKETS</a>
+        <a class="btn btn-info" href="{% url 'super_menue_users' %}" style="margin:10px;">SUPER_MENUE_USERS</a>
+        {% endif %}
+        <a style="margin:10px;">Hi, {{ request.user.username|title }}</a>
+        <a class="btn btn-info" href="/logout_request" style="margin:10px;">Logout</a>
+        {% else %}
+        <a href="{% url 'login_request' %}" class="btn btn-info">Login</a>
+        {% endif %}
+    </div>
+</div>
+<div id="body">
+    {% block content %}{% endblock %}
+</div>
+</body>
+</html>

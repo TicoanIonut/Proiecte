@@ -13,7 +13,7 @@
                     <label for="user_input">Enter your message:</label>
                     <input type="text" class="form-control" id="user_input" name="user_input">
                 </div>
-                <button type="submit" style="margin-top:3%; float:left; width:100%;" class="btn btn-primary">Send</button>
+                <button type="submit" style="margin-top:3%;" class="btn btn-primary">Send</button>
             </form>
             {% if response_text %}
             <p><strong>Response:</strong></p>
@@ -32,7 +32,7 @@
                 <p>{{ obj.question }}</p>
                 <p>{{ obj.created_at }} by {{ qs.user }}</p>
                 <hr>
-                <p>{{ obj.answer }} <a href="{% url 'delete_resp' obj.id %}" style="float:right; margin-right:1%;" class="btn btn-primary">Delete</a></p>
+                <p>{{ obj.answer }}</p>
 
             </div>
             {% endfor %}

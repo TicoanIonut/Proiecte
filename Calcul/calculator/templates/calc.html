@@ -13,7 +13,7 @@
             </div>
         </div>
     </div>
-    <div class="col-4" style="border-radius:1%; height:80%; background-color: ded;">
+    <div class="col-4" style="border-radius:1%; background-color: ded;">
         <div class="col-12 shadow" style="border-radius:3%; margin-top:3%;">
             <h3 align="center">Result</h3>
             <br>
@@ -52,10 +52,11 @@
     <div class="col-4">
         {% for obj in rendering %}
         <div style="border: 1px solid #000; border-radius:5px; margin:1%;">
-            <p style="margin-left:1%;"><strong>Operation: </strong>{{ obj.num1 }} {{ obj.symbol }} {{ obj.num2 }}</p>
+            <p><strong>Operation: </strong>{{ obj.num1 }} {{ obj.symbol }} {{ obj.num2 }}</p>
 
             <hr>
-            <p style="margin-left:1%;"><strong>Result: </strong>{{ obj.calc_answer }} <a href="{% url 'delete_res' obj.id %}" style="float:right; margin-right:1%;" class="btn btn-primary">Delete</a></p>
+            <p><strong>Result: </strong>{{ obj.calc_answer }}</p>
+
         </div>
         {% endfor %}
 

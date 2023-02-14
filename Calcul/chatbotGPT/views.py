@@ -1,6 +1,6 @@
 import openai
 from django.core.paginator import Paginator
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from api_secrets import API_KEY
 from .models import ChatbotResponse
 
@@ -22,9 +22,4 @@ def chatbot_response(request):
                       {'user_input': user_input, 'response_text': response_text, 'rendering': rendering, 'nums': nums})
     return render(request, 'answer_question.html', {'rendering': rendering, 'nums': nums})
 
-
-def delete_resp(request, chatbotresponse_id):
-    calcresponse = ChatbotResponse.objects.get(pk=chatbotresponse_id)
-    calcresponse.delete()
-    return redirect('chatbot')
 
