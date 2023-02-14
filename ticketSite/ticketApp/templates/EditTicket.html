@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %} Edit Ticket {% endblock %}
+{% block content %}
+<div class="container p-5 mb-5">
+<form method="POST">
+    {% csrf_token %}
+    {% for field in form %}
+    {{ field.label }} {{ field }}<br>
+    {% endfor %}
+    <button type="submit" class="btn btn-info">Update</button>
+</form>
+    </div>
+{% endblock %}
