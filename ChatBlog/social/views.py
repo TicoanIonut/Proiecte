@@ -36,7 +36,7 @@ def profile_list(request):
 def profile(request, pk):
 	if request.user.is_authenticated:
 		profile = Profile.objects.get(user_id=pk)
-		meeps = Meep.objects.fileter(user_id=pk).order_by("-created_at")
+		meeps = Meep.objects.filter(user_id=pk).order_by("-created_at")
 		if request.method == 'POST':
 			current_user_profile = request.user.profile
 			action = request.POST['follow']
