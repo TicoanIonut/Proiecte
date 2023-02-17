@@ -5,7 +5,7 @@
 
 <div class="row">
     {% for p in products %}
-    <div class="col-lg-3" style=" background-color: #fff;">
+    <div class="col-lg-3" style=" background-color: #fff; margin-bottom:1%; padding: 10px 10px 10px 10px;">
         <a href="{% url 'ecomm:productdetail' p.slug %}">
         <img class="thumbnail" src="{{p.image.url}}"  style="object-fit: cover; object-fit: contain; background-color: #fff;">
         </a>

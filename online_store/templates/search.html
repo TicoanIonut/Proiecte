@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %}search{% endblock %}
+{% block content %}
+<center>
+    <div class="container">
+        <h3>You searched for <span class="text-info">"{{request.GET.search}}"</span></h3>
+        <div class="row">
+            {% for result in results %}
+            <div class="col-lg-4" style=" background-color: #fff; margin-bottom:1%; padding: 10px 10px 10px 10px;">
+                <a href="{% url 'ecomm:productdetail' result.slug %}">
+                    <img class="thumbnail" src="{{result.image.url}}"
+                         style="object-fit: cover; object-fit: contain; background-color: #fff;">
+                </a>
+                <div class="box-element product" style="background-color: #fff;">
+                    <h6><a href="{% url 'ecomm:productdetail' result.slug %}" style="color: 0000;"><strong>{{ result.title }} </strong></a></h6>
+                    <hr>
+                    <a href="{% url 'ecomm:addtocart' result.id %}"
+                       class="btn btn-outline-secondary add-btn update-cart">Add
+                        to cart</a>
+                    <a class="btn btn-outline-info" href="{% url 'ecomm:productdetail' result.slug %}">Details</a>
+                    <h4 style="display: inline-block; float: right">{{result.price|floatformat:2}} $</h4>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</center>
+{% endblock %}
