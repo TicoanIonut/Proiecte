@@ -4,6 +4,7 @@ from django.urls import reverse_lazy
 from .forms import CheckoutForm, CustomerRegistrationForm, CustomerLoginForm
 from django.contrib.auth import authenticate, login, logout
 from .models import *
+from django.db.models import Q
 
 
 class EcomMixin(object):
@@ -256,6 +257,20 @@ class CustomerOrderDetailView(DetailView):
 			return redirect("/login/?next=/profile/")
 		return super().dispatch(request, *args, **kwargs)
 	
+	
+class SearchView(TemplateView):
+	template_name = 'search.html'
+	
+	def get_context_data(self, **kwargs):
+		context = super().get_context_data(**kwargs)
+		kw = self.request.GET.get('search')
+		results = Product.objects.filter(Q(title__icontains=kw) | Q(description__icontains=kw))
+		context["results"] = results
+		return context
+
+
+# ADMIN PANEL
+
 	
 class AdminLoginView(FormView):
 	template_name = "adminpages/adminlogin.html"

@@ -10,7 +10,7 @@
             <li class="nav-item active">
             </li>
         </ul>
-        <form class="d-flex" method="GET" action="" style="margin-top:1%;">
+        <form class="d-flex" method="GET" action="{% url 'ecomm:search' %}" style="margin-top:1%;">
             {% csrf_token %}
             <input class="form-control me-2" type="search" placeholder="Search Product" aria-label="Search"
                    style="margin:10px; border-radius: 5px;" name="search" required>
