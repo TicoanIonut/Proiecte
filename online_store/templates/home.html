@@ -4,19 +4,48 @@
 {% block content %}
 
 <div class="row">
-    {% for p in products %}
+    {% for p in product_list %}
     <div class="col-lg-3" style=" background-color: #fff; margin-bottom:1%; padding: 10px 10px 10px 10px;">
         <a href="{% url 'ecomm:productdetail' p.slug %}">
-        <img class="thumbnail" src="{{p.image.url}}"  style="object-fit: cover; object-fit: contain; background-color: #fff;">
+            <img class="thumbnail" src="{{p.image.url}}"
+                 style="object-fit: cover; object-fit: contain; background-color: #fff;">
         </a>
-            <div class="box-element product" style="background-color: #fff;">
+        <div class="box-element product" style="background-color: #fff;">
             <h6><a href="{% url 'ecomm:productdetail' p.slug %}" style="color: 0000;"><strong>{{ p.title }} </strong></a></h6>
             <hr>
-            <a  href="{% url 'ecomm:addtocart' p.id %}" class="btn btn-outline-secondary add-btn update-cart" >Add to cart</a>
-            <a  class="btn btn-outline-info" href="{% url 'ecomm:productdetail' p.slug %}">Details</a>
+            <a href="{% url 'ecomm:addtocart' p.id %}" class="btn btn-outline-secondary add-btn update-cart">Add to
+                cart</a>
+            <a class="btn btn-outline-info" href="{% url 'ecomm:productdetail' p.slug %}">Details</a>
             <h4 style="display: inline-block; float: right">{{p.price|floatformat:2}} $</h4>
         </div>
     </div>
     {% endfor %}
 </div>
+
+<nav aria-label="..." class="">
+        <ul class="pagination justify-content-center">
+            {% if product_list.has_previous %}
+            <li class="page-item"><a class="page-link text-info" href="?page=1">First</a></li>
+            <li class="page-item">
+                <a class="page-link text-info" href="?page={{ product_list.previous_page_number }}">Previous</a>
+              </li>
+            {% endif %}
+            {% for i in product_list.paginator.page_range %}
+            {% if i == product_list.number %}
+            <li class="page-item active"><a class="page-link bg-info">{{i}}</a></li>
+            {% else %}
+            <li class="page-item "><a class="page-link text-info" href="?page={{i}}">{{i}}</a></li>
+            {% endif %}
+            {% endfor %}
+
+            {% if product_list.has_next %}
+            <li class="page-item">
+                <a class="page-link text-info" href="?page={{ product_list.next_page_number }}">Next</a>
+            </li>
+            <li class="page-item"><a class="page-link text-info" href="?page={{ product_list.paginator.num_pages }}">Last
+                    </a></li>
+            {% endif %}
+        </ul>
+      </nav>
+
 {% endblock %}

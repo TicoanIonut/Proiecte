@@ -5,47 +5,42 @@ from .forms import CheckoutForm, CustomerRegistrationForm, CustomerLoginForm
 from django.contrib.auth import authenticate, login, logout
 from .models import *
 from django.db.models import Q
+from django.core.paginator import Paginator
 
 
 class EcomMixin(object):
-	def dispatch(self, request, *args, **kwargs):
-		cart_id = request.session.get("cart_id")
+	def get_context_data(self, **kwargs):
+		context = super().get_context_data(**kwargs)
+		cart_id = self.request.session.get("cart_id")
 		if cart_id:
 			cart_obj = Cart.objects.get(id=cart_id)
-			if request.user.is_authenticated and request.user.customer:
-				cart_obj.customer = request.user.customer
+			if self.request.user.is_authenticated and self.request.user.customer:
+				cart_obj.customer = self.request.user.customer
 				cart_obj.save()
-		return super().dispatch(request, *args, **kwargs)
+			context['cart'] = cart_obj
+		return context
 
 
-class HomeView(TemplateView):
+class HomeView(EcomMixin, TemplateView):
 	template_name = 'home.html'
 	
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
-		cart_id = self.request.session.get("cart_id", None)
-		if cart_id:
-			cart = Cart.objects.get(id=cart_id)
-		else:
-			cart = None
-		context['cart'] = cart
-		context['products'] = Product.objects.all()
+		all_products = Product.objects.all().order_by('-id')
+		paginator = Paginator(all_products, 8)
+		page_number = self.request.GET.get('page')
+		product_list = paginator.get_page(page_number)
+		context['product_list'] = product_list
 		return context
 	
 	
-class ProductDetailView(TemplateView):
+class ProductDetailView(EcomMixin, TemplateView):
 	template_name = 'productdetail.html'
 	
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
 		url_slug = self.kwargs['slug']
 		product = Product.objects.get(slug=url_slug)
-		cart_id = self.request.session.get("cart_id", None)
-		if cart_id:
-			cart = Cart.objects.get(id=cart_id)
-		else:
-			cart = None
-		context['cart'] = cart
 		context['product'] = product
 		return context
 
@@ -111,21 +106,15 @@ class ManageCartView(View):
 		return redirect('ecomm:mycart')
 
 	
-class MyCartView(TemplateView):
+class MyCartView(EcomMixin, TemplateView):
 	template_name = "mycart.html"
 
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
-		cart_id = self.request.session.get("cart_id", None)
-		if cart_id:
-			cart = Cart.objects.get(id=cart_id)
-		else:
-			cart = None
-		context['cart'] = cart
 		return context
 	
 	
-class EmptyCartView(View):
+class EmptyCartView(EcomMixin, View):
 	def get(self, request, *args, **kwargs):
 		cart_id = request.session.get("cart_id", None)
 		if cart_id:
@@ -136,7 +125,7 @@ class EmptyCartView(View):
 		return redirect("ecomm:mycart")
 	
 	
-class CheckoutView(CreateView):
+class CheckoutView(EcomMixin, CreateView):
 	template_name = "checkout.html"
 	form_class = CheckoutForm
 	success_url = reverse_lazy('ecomm:home')
@@ -150,12 +139,6 @@ class CheckoutView(CreateView):
 		
 	def get_context_data(self, **kwargs):
 		context = super(CheckoutView, self).get_context_data(**kwargs)
-		cart_id = self.request.session.get('cart_id', None)
-		if cart_id:
-			cart_obj = Cart.objects.get(id=cart_id)
-		else:
-			cart_obj = None
-		context['cart'] = cart_obj
 		return context
 	
 	def form_valid(self, form):
@@ -171,7 +154,7 @@ class CheckoutView(CreateView):
 		return super().form_valid(form)
 	
 	
-class CustomerRegistrationView(CreateView):
+class CustomerRegistrationView(EcomMixin, CreateView):
 	template_name = "customerregistration.html"
 	form_class = CustomerRegistrationForm
 	success_url = reverse_lazy("ecomm:home")
@@ -199,7 +182,7 @@ class CustomerLogoutView(View):
 		return redirect('ecomm:home')
 
 
-class CustomerLoginView(FormView):
+class CustomerLoginView(EcomMixin, FormView):
 	template_name = "customerlogin.html"
 	form_class = CustomerLoginForm
 	success_url = reverse_lazy("ecomm:home")
@@ -214,16 +197,9 @@ class CustomerLoginView(FormView):
 			return render(self.request, self.template_name, {"form": self.form_class, "error": "Invalid credentials"})
 	
 		return super().form_valid(form)
-	
-	# def get_success_url(self):
-	# 	if "next" in self.request.GET:
-	# 		next_url = self.request.GET.get("next")
-	# 		return next_url
-	# 	else:
-	# 		return self.success_url
 		
 		
-class CustomerProfileView(TemplateView):
+class CustomerProfileView(EcomMixin, TemplateView):
 	template_name = 'cutomerprofile.html'
 	
 	def dispatch(self, request, *args, **kwargs):
@@ -242,7 +218,7 @@ class CustomerProfileView(TemplateView):
 		return context
 
 
-class CustomerOrderDetailView(DetailView):
+class CustomerOrderDetailView(EcomMixin, DetailView):
 	template_name = "customerorderdetail.html"
 	model = Order
 	context_object_name = "ord_obj"
@@ -258,16 +234,30 @@ class CustomerOrderDetailView(DetailView):
 		return super().dispatch(request, *args, **kwargs)
 	
 	
-class SearchView(TemplateView):
+class SearchView(EcomMixin, TemplateView):
 	template_name = 'search.html'
 	
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
 		kw = self.request.GET.get('search')
-		results = Product.objects.filter(Q(title__icontains=kw) | Q(description__icontains=kw))
+		searched_products = Product.objects.filter(Q(title__icontains=kw) | Q(description__icontains=kw)).order_by('title')
+		paginator = Paginator(searched_products, 6)
+		page_number = self.request.GET.get('page') or 1
+		results = paginator.get_page(page_number)
 		context["results"] = results
 		return context
 
+
+def searches(request):
+	if 'search' in request.GET and request.GET['search']:
+		results = request.GET['search']
+		word = Product.objects.filter(Q(title__icontains=results) | Q(description__icontains=results)).order_by('title')
+		paginator = Paginator(word, 6)  # Show 25 contacts per page
+		page = request.GET.get('page', 1)
+		results = paginator.page(page)
+		return render(request, 'search.html', {'results': results})
+	else:
+		return render(request, 'search.html')
 
 # ADMIN PANEL
 
