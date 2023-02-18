@@ -3,11 +3,11 @@
 {% block title %}search{% endblock %}
 {% block content %}
 <center>
-    <div class="container">
-        <h3>You searched for <span class="text-info">"{{request.GET.search}}"</span></h3>
+    <h3>You searched for <span class="text-info">"{{request.GET.search}}"</span></h3>
+
         <div class="row">
             {% for result in results %}
-            <div class="col-lg-4" style=" background-color: #fff; margin-bottom:1%; padding: 10px 10px 10px 10px;">
+            <div class="col-lg-3" style=" background-color: #fff; margin-bottom:1%; padding: 10px 10px 10px 10px;">
                 <a href="{% url 'ecomm:productdetail' result.slug %}">
                     <img class="thumbnail" src="{{result.image.url}}"
                          style="object-fit: cover; object-fit: contain; background-color: #fff;">
@@ -24,6 +24,31 @@
             </div>
             {% endfor %}
         </div>
-    </div>
+
 </center>
+<nav aria-label="..." class="">
+        <ul class="pagination justify-content-center">
+            {% if results.has_previous %}
+            <li class="page-item"><a class="page-link text-info" href="?page=1">First</a></li>
+            <li class="page-item">
+                <a class="page-link text-info" href="?page={{ results.previous_page_number }}">Previous</a>
+              </li>
+            {% endif %}
+            {% for i in results.paginator.page_range %}
+            {% if i == results.number %}
+            <li class="page-item active"><a class="page-link bg-info">{{i}}</a></li>
+            {% else %}
+            <li class="page-item"><a class="page-link text-info" href="?page={{i}}">{{i}}</a></li>
+            {% endif %}
+            {% endfor %}
+            {% if results.has_next %}
+            <li class="page-item">
+                <a class="page-link text-info" href="?page={{ results.next_page_number }}">Next</a>
+            </li>
+            <li class="page-item"><a class="page-link text-info" href="?page={{ results.paginator.num_pages }}">Last
+                    </a></li>
+            {% endif %}
+        </ul>
+      </nav>
+
 {% endblock %}
