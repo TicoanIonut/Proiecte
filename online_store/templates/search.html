@@ -50,5 +50,15 @@
             {% endif %}
         </ul>
       </nav>
+{% if results.has_previous %}
+  <a href="{{ search_url }}page={{ results.previous_page_number }}">Previous</a>
+{% endif %}
 
+{% for result in results %}
+  <!-- display search results -->
+{% endfor %}
+
+{% if results.has_next %}
+  <a href="{{ search_url }}page={{ results.next_page_number }}">Next</a>
+{% endif %}
 {% endblock %}
