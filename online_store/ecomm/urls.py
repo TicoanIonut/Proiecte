@@ -18,7 +18,7 @@ urlpatterns = [
 	path('profile/', CustomerProfileView.as_view(), name='customerprofile'),
 	path("profile/order-<int:pk>/", CustomerOrderDetailView.as_view(), name="customerorderdetail"),
 	# path("search/", SearchView.as_view(), name="search"),
-	path("search/", views.searches, name="search"),
+	path("search/", views.searches, name="searches"),
 	
 	path("admin-login/", AdminLoginView.as_view(), name="adminlogin"),
 	path("admin-home/", AdminHomeView.as_view(), name="adminhome"),
