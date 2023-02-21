@@ -29,36 +29,24 @@
 <nav aria-label="..." class="">
         <ul class="pagination justify-content-center">
             {% if results.has_previous %}
-            <li class="page-item"><a class="page-link text-info" href="?page=1">First</a></li>
+            <li class="page-item"><a class="page-link text-info" href="{{ search_url }}page=1">First</a></li>
             <li class="page-item">
-                <a class="page-link text-info" href="?page={{ results.previous_page_number }}">Previous</a>
+                <a class="page-link text-info" href="{{ search_url }}page={{ results.previous_page_number }}">Previous</a>
               </li>
             {% endif %}
             {% for i in results.paginator.page_range %}
             {% if i == results.number %}
             <li class="page-item active"><a class="page-link bg-info">{{i}}</a></li>
             {% else %}
-            <li class="page-item"><a class="page-link text-info" href="?page={{i}}">{{i}}</a></li>
+            <li class="page-item"><a class="page-link text-info" href="{{ search_url }}page={{i}}">{{i}}</a></li>
             {% endif %}
             {% endfor %}
             {% if results.has_next %}
             <li class="page-item">
-                <a class="page-link text-info" href="?page={{ results.next_page_number }}">Next</a>
+                <a class="page-link text-info" href="{{ search_url }}page={{ results.next_page_number }}">Next</a>
             </li>
-            <li class="page-item"><a class="page-link text-info" href="?page={{ results.paginator.num_pages }}">Last
+            <li class="page-item"><a class="page-link text-info" href="{{ search_url }}page={{ results.paginator.num_pages }}">Last
                     </a></li>
             {% endif %}
         </ul>
       </nav>
-{% if results.has_previous %}
-  <a href="{{ search_url }}page={{ results.previous_page_number }}">Previous</a>
-{% endif %}
-
-{% for result in results %}
-  <!-- display search results -->
-{% endfor %}
-
-{% if results.has_next %}
-  <a href="{{ search_url }}page={{ results.next_page_number }}">Next</a>
-{% endif %}
-{% endblock %}
