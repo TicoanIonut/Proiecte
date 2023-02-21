@@ -234,76 +234,41 @@ class CustomerOrderDetailView(EcomMixin, DetailView):
 		return super().dispatch(request, *args, **kwargs)
 	
 	
-class SearchView(EcomMixin, TemplateView):
-	template_name = 'search.html'
-	
-	def get_context_data(self, **kwargs):
-		context = super().get_context_data(**kwargs)
-		kw = self.request.GET.get('search')
-		searched_products = Product.objects.filter(Q(title__icontains=kw) | Q(description__icontains=kw)).order_by('title')
-		paginator = Paginator(searched_products, 6)
-		page_number = self.request.GET.get('page') or 1
-		results = paginator.get_page(page_number)
-		context["results"] = results
-		return context
+# class SearchView(EcomMixin, TemplateView):
+# 	template_name = 'search.html'
+#
+# 	def get_context_data(self, **kwargs):
+# 		context = super().get_context_data(**kwargs)
+# 		kw = self.request.GET.get('search')
+# 		searched_products = Product.objects.filter(Q(title__icontains=kw) | Q(description__icontains=kw)).order_by('title')
+# 		paginator = Paginator(searched_products, 6)
+# 		page_number = self.request.GET.get('page') or 1
+# 		results = paginator.get_page(page_number)
+# 		context = {'results': results, 'search_query': kw}
+# 		if kw:
+# 			context['search_query'] = kw
+# 			context['search_url'] = f'?search={kw}&'
+# 		return context
 
-
-# def searches(request):
-#     word = Product.objects.all()
-#     search_query = request.GET.get('search')
-#     if search_query:
-#         word = Product.objects.filter(Q(title__icontains=search_query) | Q(description__icontains=search_query)).distinct()
-#     paginator = Paginator(word, 6)
-#     page = request.GET.get('page')
-#     try:
-#         results = paginator.page(page)
-#     except PageNotAnInteger:
-#         results = paginator.page(1)
-#     except EmptyPage:
-#         results = paginator.page(paginator.num_pages)
-#     search_params = {'search': search_query} if search_query else {}
-#     search_params_encoded = '&'.join([f"{k}={v}" for k, v in search_params.items()])
-#     page_url = reverse('ecomm:searches')
-#     if search_params_encoded:
-#         page_url += f'?{search_params_encoded}'
-#     results.has_next_url = f"{page_url}&page={results.next_page_number()}" if results.has_next() else None
-#     results.has_previous_url = f"{page_url}&page={results.previous_page_number()}" if results.has_previous() else None
-#     return render(request, 'search.html', {'results': results})
-
-# def searches(request):
-# 	word = Product.objects.all()
-# 	res = request.GET.get('search')
-# 	if res:
-# 		word = Product.objects.filter(Q(title__icontains=res)
-# 	                              | Q(description__icontains=res)).order_by('title').distinct()
-# 	paginator = Paginator(word, 6)
-# 	page = request.GET.get('page')
-# 	try:
-# 		results = paginator.page(page)
-# 	except PageNotAnInteger:
-# 		results = paginator.page(1)
-# 	except EmptyPage:
-# 		results = paginator.page(paginator.num_pages)
-# 	return render(request, 'search.html', {'results': results})
 
 def searches(request):
-    word = Product.objects.all()
-    res = request.GET.get('search')
-    if res:
-        word = Product.objects.filter(Q(title__icontains=res) | Q(description__icontains=res)).distinct()
-    paginator = Paginator(word, 6)
-    page = request.GET.get('page')
-    try:
-        results = paginator.page(page)
-    except PageNotAnInteger:
-        results = paginator.page(1)
-    except EmptyPage:
-        results = paginator.page(paginator.num_pages)
-    context = {'results': results, 'search_query': res}
-    if res:
-        context['search_query'] = res
-        context['search_url'] = f'?search={res}&'
-    return render(request, 'search.html', context)
+	word = Product.objects.all()
+	res = request.GET.get('search')
+	if res:
+		word = Product.objects.filter(Q(title__icontains=res) | Q(description__icontains=res)).distinct()
+	paginator = Paginator(word, 6)
+	page = request.GET.get('page')
+	try:
+		results = paginator.page(page)
+	except PageNotAnInteger:
+		results = paginator.page(1)
+	except EmptyPage:
+		results = paginator.page(paginator.num_pages)
+	context = {'results': results, 'search_query': res}
+	if res:
+		context['search_query'] = res
+		context['search_url'] = f'?search={res}&'
+	return render(request, 'search.html', context)
 
 # ADMIN PANEL
 
