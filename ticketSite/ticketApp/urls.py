@@ -10,7 +10,9 @@ urlpatterns = [
     path('logout_request/', views.logout_request, name='logout_request'),
     path('CreateTicket/', views.create_ticket, name='CreateTicket'),
     path('EditTicket<ticket_id>/', views.edit_ticket, name='EditTicket'),
-    path('index_search/', views.index_search, name='index_search'),
+    path('index_search/', views.searches, name='searches'),
+    path('index_updated/', views.index_updated, name='index_updated'),
+    
     
     path('DeleteTicket<ticket_id>/', views.delete_ticket, name='DeleteTicket'),
     path('InactiveTicket<ticket_id>/', views.inactive_ticket, name='InactiveTicket'),
