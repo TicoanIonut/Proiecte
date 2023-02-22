@@ -1,6 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.forms import AuthenticationForm
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render, redirect
 from .forms import *
 from .models import *
@@ -136,26 +137,53 @@ def active_users(request, user_id):
 
 
 def index(request):
-	tickets = Ticket.objects.order_by('-created_at')
+	p = Paginator(Ticket.objects.order_by('-created_at'), 8)
+	page = request.GET.get('page')
+	tickets = p.get_page(page)
+	return render(request, 'index.html', {'tickets': tickets})
+
+
+def index_updated(request):
+	p = Paginator(Ticket.objects.order_by('-updated_at'), 8)
+	page = request.GET.get('page')
+	tickets = p.get_page(page)
 	return render(request, 'index.html', {'tickets': tickets})
 
 
 @login_required
-def index_search(request):
-	if request.method == "POST":
-		searched = request.POST['searched']
-		tickets = Ticket.objects.filter(Q(title__icontains=searched) | Q(compartment__icontains=searched) |
-		                                Q(id__icontains=searched) | Q(created_at__icontains=searched) |
-		                                Q(updated_at__icontains=searched) | Q(status__icontains=searched))
-		return render(request, 'index_search.html', {'tickets': tickets, 'searched': searched})
-	else:
-		return render(request, 'index_search.html', {})
+def searches(request):
+	word = Ticket.objects.all()
+	res = request.GET.get('search')
+	if res:
+		word = Ticket.objects.filter(Q(title__icontains=res) | Q(compartment__icontains=res) | Q(status__icontains=res) | Q(assignee__username__icontains=res)).distinct()
+	paginator = Paginator(word, 6)
+	page = request.GET.get('page')
+	try:
+		results = paginator.page(page)
+	except PageNotAnInteger:
+		results = paginator.page(1)
+	except EmptyPage:
+		results = paginator.page(paginator.num_pages)
+	context = {'results': results, 'search_query': res}
+	if res:
+		context['search_query'] = res
+		context['search_url'] = f'?search={res}&'
+	return render(request, 'search.html', context)
+
+# def index_search(request):
+# 	search = request.GET.get('search')
+# 	tickets = Ticket.objects.filter(Q(title__icontains=search) | Q(compartment__icontains=search) |
+# 	                                Q(id__icontains=search) | Q(created_at__icontains=search) |
+# 	                                Q(updated_at__icontains=search) | Q(status__icontains=search))
+# 	return render(request, 'search.html', {'tickets': tickets, 'search': search})
 
 
 @login_required
 def super_menue_tickets(request):
 	if request.user.is_superuser:
-		tickets = Ticket.objects.order_by('-created_at')
+		p = Paginator(Ticket.objects.order_by('-created_at'), 8)
+		page = request.GET.get('page')
+		tickets = p.get_page(page)
 		return render(request, 'super_menue_tickets.html', {'tickets': tickets})
 
 

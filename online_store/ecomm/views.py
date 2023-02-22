@@ -256,7 +256,7 @@ def searches(request):
 	res = request.GET.get('search')
 	if res:
 		word = Product.objects.filter(Q(title__icontains=res) | Q(description__icontains=res)).distinct()
-	paginator = Paginator(word, 6)
+	paginator = Paginator(word, 8)
 	page = request.GET.get('page')
 	try:
 		results = paginator.page(page)
