@@ -47,3 +47,14 @@ class CustomerLoginForm(forms.Form):
 	password = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'password', 'class': 'form-control'}))
 	
 	
+class PasswordForgotForm(forms.Form):
+	email = forms.CharField(widget=forms.EmailInput(attrs={'placeholder': 'Enter email fot the account', 'class': 'form-control'}))
+	
+	def clean_email(self):
+		e = self.cleaned_data.get('email')
+		if Customer.objects.filter(user__email=e).exists():
+			pass
+		else:
+			raise forms.ValidationError('Customer with this email does not exist')
+		return e
+			

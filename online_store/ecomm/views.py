@@ -1,7 +1,7 @@
 from django.shortcuts import redirect, render
 from django.views.generic import TemplateView, View, CreateView, FormView, DetailView, ListView
 from django.urls import reverse_lazy, reverse
-from .forms import CheckoutForm, CustomerRegistrationForm, CustomerLoginForm
+from .forms import CheckoutForm, CustomerRegistrationForm, CustomerLoginForm, PasswordForgotForm
 from django.contrib.auth import authenticate, login, logout
 from .models import *
 from django.db.models import Q
@@ -269,6 +269,17 @@ def searches(request):
 		context['search_query'] = res
 		context['search_url'] = f'?search={res}&'
 	return render(request, 'search.html', context)
+
+
+class PasswordForgotView(FormView):
+	template_name = 'forgotpassword.html'
+	form_class = PasswordForgotForm
+	success_url = '/forgot-password/'
+	
+	def form_valid(self, form):
+		email = form.cleaned_data.get('email')
+		
+		return super(PasswordForgotView, self).form_valid(form)
 
 # ADMIN PANEL
 
