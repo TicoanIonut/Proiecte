@@ -80,7 +80,7 @@ ORDER_STATUS = (
 
 METHOD = (
 	("Cash On Delivery", "Cash On Delivery"),
-	("some_online_payment", "some_online_payment"),
+	("PayU", "PayU"),
 )
 
 
