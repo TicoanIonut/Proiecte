@@ -7,7 +7,8 @@
     <div class="row">
         <div class="col-md-12">
             <h3>All Product list</h3><hr>
-            <a href="{% url 'ecomm:adminproductcreate' %}">Add New Product</a>
+            <a href="{% url 'ecomm:adminproductcreate' %}" class="btn btn-info">Add New Product</a>
+            <a href="" class="btn btn-info">Search</a>
             <table class="table table-striped">
                 <thead>
                     <tr>
@@ -16,6 +17,8 @@
                         <th>Image</th>
                         <th>Price</th>
                         <th>Views</th>
+                        <th>Edit</th>
+                        <th>Delete</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -24,8 +27,10 @@
                         <td>{{forloop.counter}}</td>
                         <td>{{p.title}}</td>
                         <td><img src="{{p.image.url}}" style="height: 60px;" alt=""></td>
-                        <td>{{p.selling_price}}</td>
+                        <td>{{p.price}}</td>
                         <td>{{p.view_count}}</td>
+                        <td></td>
+                        <td></td>
                     </tr>
                     {% endfor %}
                 </tbody>

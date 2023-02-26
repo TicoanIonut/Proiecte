@@ -19,12 +19,16 @@ urlpatterns = [
 	path("profile/order-<int:pk>/", CustomerOrderDetailView.as_view(), name="customerorderdetail"),
 	# path("search/", SearchView.as_view(), name="searches"),
 	path("search/", views.searches, name="searches"),
+	path("forgot-password/", PasswordForgotView.as_view(), name="passwordforgot"),
+	path("password-reset/<email>/<token>/", PasswordResetView.as_view(), name="passwordreset"),
 	
 	path("admin-login/", AdminLoginView.as_view(), name="adminlogin"),
 	path("admin-home/", AdminHomeView.as_view(), name="adminhome"),
 	path("admin-order/<int:pk>/", AdminOrderDetailView.as_view(), name="adminorderdetail"),
 	path("admin-all-orders/", AdminOrderListView.as_view(), name="adminorderlist"),
 	path("admin-order-<int:pk>-change/", AdminOrderStatusChangeView.as_view(), name="adminorderstatuschange"),
-	path("forgot-password/", PasswordForgotView.as_view(), name="passwordforgot"),
+	path("admin-product/list/", AdminProductListView.as_view(), name="adminproductlist"),
+	path("admin-product/add/", AdminProductCreateView.as_view(), name="adminproductcreate"),
+	
 	
 ]
