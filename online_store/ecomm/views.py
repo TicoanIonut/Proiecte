@@ -1,11 +1,15 @@
+from django.conf import settings
+from django.core.mail import send_mail
 from django.shortcuts import redirect, render
 from django.views.generic import TemplateView, View, CreateView, FormView, DetailView, ListView
 from django.urls import reverse_lazy, reverse
-from .forms import CheckoutForm, CustomerRegistrationForm, CustomerLoginForm
+from .forms import *
 from django.contrib.auth import authenticate, login, logout
 from .models import *
 from django.db.models import Q
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+
+from .utils import password_reset_token
 
 
 class EcomMixin(object):
@@ -270,7 +274,50 @@ def searches(request):
 		context['search_url'] = f'?search={res}&'
 	return render(request, 'search.html', context)
 
-# ADMIN PANEL
+
+
+class PasswordForgotView(FormView):
+	template_name = "forgotpassword.html"
+	form_class = PasswordForgotForm
+	success_url = "/forgot-password/?m=s"
+	
+	def form_valid(self, form):
+		email = form.cleaned_data.get("email")
+		url = self.request.META['HTTP_HOST']
+		customer = Customer.objects.get(user__email=email)
+		user = customer.user
+		text_content = 'Please Click the link below to reset your password. '
+		html_content = url + "/password-reset/" + email + "/" + password_reset_token.make_token(user) + "/"
+		send_mail('Password Reset Link | Django Ecommerce', text_content + html_content, settings.EMAIL_HOST_USER,
+		          [email], fail_silently=False,)
+		return super().form_valid(form)
+
+
+class PasswordResetView(FormView):
+	template_name = "passwordreset.html"
+	form_class = PasswordResetForm
+	success_url = "/login/"
+	
+	def dispatch(self, request, *args, **kwargs):
+		email = self.kwargs.get("email")
+		user = User.objects.get(email=email)
+		token = self.kwargs.get("token")
+		if user is not None and password_reset_token.check_token(user, token):
+			pass
+		else:
+			return redirect(reverse("ecomm:passworforgot") + "?m=e")
+		return super().dispatch(request, *args, **kwargs)
+	
+	def form_valid(self, form):
+		password = form.cleaned_data['new_password']
+		email = self.kwargs.get("email")
+		user = User.objects.get(email=email)
+		user.set_password(password)
+		user.save()
+		return super().form_valid(form)
+
+
+"""ADMIN PANEL"""
 
 	
 class AdminLoginView(FormView):
@@ -294,7 +341,7 @@ class AdminRequiredMixin(object):
 		if request.user.is_authenticated and Admin.objects.filter(user=request.user).exists():
 			pass
 		else:
-			return redirect('/login/?next=profile/')
+			return redirect("/admin-login/")
 		return super().dispatch(request, *args, **kwargs)
 
 
@@ -303,8 +350,7 @@ class AdminHomeView(AdminRequiredMixin, TemplateView):
 	
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
-		context["pendingorders"] = Order.objects.filter(
-			order_status="Order Received").order_by("-id")
+		context["pendingorders"] = Order.objects.filter(order_status="Order Received").order_by("-id")
 		return context
 	
 	
@@ -339,5 +385,17 @@ class AdminOrderStatusChangeView(AdminRequiredMixin, View):
 		order_obj.order_status = new_status
 		order_obj.save()
 		return redirect(reverse_lazy("ecomm:adminorderdetail", kwargs={"pk": order_id}))
+	
+	
+class AdminProductListView(AdminRequiredMixin, ListView):
+	template_name = "adminpages/adminproductlist.html"
+	queryset = Product.objects.all().order_by("-id")
+	context_object_name = "allproducts"
+	
+	
+class AdminProductCreateView(AdminRequiredMixin, CreateView):
+	template_name = "adminpages/adminproductcreate.html"
+	form_class = ProductForm
+	success_url = reverse_lazy("ecomm:adminproductlist")
 	
 	

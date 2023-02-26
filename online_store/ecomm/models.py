@@ -25,6 +25,7 @@ class Product(models.Model):
 	image = models.ImageField(upload_to='products')
 	price = models.PositiveIntegerField()
 	description = models.TextField()
+	view_count = models.PositiveIntegerField(default=0)
 
 	def __str__(self):
 		return self.title
@@ -80,8 +81,7 @@ ORDER_STATUS = (
 
 METHOD = (
 	("Cash On Delivery", "Cash On Delivery"),
-	("Khalti", "Khalti"),
-	("Esewa", "Esewa"),
+	("PayU", "PayU"),
 )
 
 
