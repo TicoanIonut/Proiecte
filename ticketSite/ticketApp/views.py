@@ -150,6 +150,34 @@ def index_updated(request):
 	return render(request, 'index.html', {'tickets': tickets})
 
 
+def status_updated(request):
+	p = Paginator(Ticket.objects.order_by('-status'), 8)
+	page = request.GET.get('page')
+	tickets = p.get_page(page)
+	return render(request, 'index.html', {'tickets': tickets})
+
+
+def status_compartment(request):
+	p = Paginator(Ticket.objects.order_by('-compartment'), 8)
+	page = request.GET.get('page')
+	tickets = p.get_page(page)
+	return render(request, 'index.html', {'tickets': tickets})
+
+
+def status_created_by(request):
+	p = Paginator(Ticket.objects.order_by('-assignee'), 8)
+	page = request.GET.get('page')
+	tickets = p.get_page(page)
+	return render(request, 'index.html', {'tickets': tickets})
+
+
+def status_summary(request):
+	p = Paginator(Ticket.objects.order_by('-title'), 8)
+	page = request.GET.get('page')
+	tickets = p.get_page(page)
+	return render(request, 'index.html', {'tickets': tickets})
+
+
 @login_required
 def searches(request):
 	word = Ticket.objects.all()
