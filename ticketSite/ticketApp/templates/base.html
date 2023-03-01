@@ -23,8 +23,12 @@
     </form>
         <a class="nav-link dropdown-toggle btn-info" style="margin:10px;" href="#"   data-bs-toggle="dropdown" >Arrange</a>
         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li><a class="dropdown-item" href="{% url 'index_updated' %}">Update</a></li>
-            <li><a class="dropdown-item" href="{% url 'index' %}">Created</a></li>
+            <li><a class="dropdown-item" href="{% url 'status_created_by' %}">Created by</a></li>
+            <li><a class="dropdown-item" href="{% url 'status_summary' %}">Summary</a></li>
+            <li><a class="dropdown-item" href="{% url 'status_updated' %}">Status</a></li>
+            <li><a class="dropdown-item" href="{% url 'status_compartment' %}">Compartment</a></li>
+            <li><a class="dropdown-item" href="{% url 'index' %}">Created at</a></li>
+            <li><a class="dropdown-item" href="{% url 'index_updated' %}">Updated at</a></li>
         </ul>
     {% endif %}
     <div class="header-right">

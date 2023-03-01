@@ -12,6 +12,10 @@ urlpatterns = [
     path('EditTicket<ticket_id>/', views.edit_ticket, name='EditTicket'),
     path('index_search/', views.searches, name='searches'),
     path('index_updated/', views.index_updated, name='index_updated'),
+    path('status_updated/', views.status_updated, name='status_updated'),
+    path('status_created_by/', views.status_created_by, name='status_created_by'),
+    path('status_compartment/', views.status_compartment, name='status_compartment'),
+    path('status_summary/', views.status_summary, name='status_summary'),
     
     
     path('DeleteTicket<ticket_id>/', views.delete_ticket, name='DeleteTicket'),
