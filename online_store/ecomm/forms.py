@@ -37,15 +37,12 @@ class CustomerRegistrationForm(forms.ModelForm):
 		uname = self.cleaned_data.get("username")
 		if User.objects.filter(username=uname).exists():
 			raise forms.ValidationError("Customer with this username already exists.")
-		
 		return uname
 	
 	def clean_email(self):
 		email = self.cleaned_data.get("email")
 		if User.objects.filter(email=email).exists():
-			raise forms.ValidationError(
-				"Customer with this email already exists.")
-		
+			raise forms.ValidationError("Customer with this email already exists.")
 		return email
 
 
