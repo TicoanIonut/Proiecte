@@ -1,7 +1,8 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.forms import PasswordInput, EmailInput, TextInput
-
+from captcha.fields import ReCaptchaField
+from captcha.widgets import ReCaptchaV2Checkbox
 from .models import Order, Customer, Product
 
 
@@ -21,6 +22,7 @@ class CustomerRegistrationForm(forms.ModelForm):
 	username = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Username', 'class': 'form-control'}))
 	password = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'Password', 'class': 'form-control'}))
 	email = forms.CharField(widget=forms.EmailInput(attrs={'placeholder': 'Email', 'class': 'form-control'}))
+	captcha = ReCaptchaField(widget=ReCaptchaV2Checkbox())
 	
 	class Meta:
 		model = Customer
@@ -49,6 +51,7 @@ class CustomerRegistrationForm(forms.ModelForm):
 class CustomerLoginForm(forms.Form):
 	username = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'username', 'class': 'form-control'}))
 	password = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'password', 'class': 'form-control'}))
+	captcha = ReCaptchaField(widget=ReCaptchaV2Checkbox())
 	
 	
 class ProductForm(forms.ModelForm):

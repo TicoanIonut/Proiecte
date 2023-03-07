@@ -13,7 +13,7 @@ import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-from secret import EMAIL_USER_HOST, EMAIL_PASSWORD_HOST
+from secret import EMAIL_USER_HOST, EMAIL_PASSWORD_HOST, R_PUB_K, R_PRIV_K
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'ecomm',
+    'captcha',
 ]
 
 MIDDLEWARE = [
@@ -135,3 +136,8 @@ EMAIL_PORT = 587
 # 465
 EMAIL_HOST_USER = EMAIL_USER_HOST
 EMAIL_HOST_PASSWORD = EMAIL_PASSWORD_HOST
+
+
+RECAPTCHA_PUBLIC_KEY = R_PUB_K
+RECAPTCHA_PRIVATE_KEY = R_PRIV_K
+SILENCED_SYSTEM_CHECKS = ['captcha_recaptcha_test_key_error']
