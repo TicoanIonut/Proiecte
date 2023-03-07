@@ -14,7 +14,7 @@ def delete_res(request, calcresponse_id):
 	return redirect('calc')
 
 
-@login_required()
+# @login_required()
 def calc(request):
 	def create_calc_response(user, num1, symbol, num2, calc_answer):
 		CalcResponse.objects.create(user=user, num1=num1, symbol=symbol, num2=num2, calc_answer=calc_answer)
