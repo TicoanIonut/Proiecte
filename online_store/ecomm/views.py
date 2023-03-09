@@ -221,8 +221,6 @@ class CustomerRegistrationView(EcomMixin, CreateView):
 		return super().form_valid(form)
 	
 
-
-
 class CustomerLogoutView(View):
 	def get(self, request):
 		logout(request)
