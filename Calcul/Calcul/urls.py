@@ -20,4 +20,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('calculator.urls')),
     path('', include('chatbotGPT.urls')),
+    path('', include('conversation.urls')),
 ]

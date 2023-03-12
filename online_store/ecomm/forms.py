@@ -22,7 +22,6 @@ class CustomerRegistrationForm(forms.ModelForm):
 	username = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Username', 'class': 'form-control'}))
 	password = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'Password', 'class': 'form-control'}))
 	email = forms.CharField(widget=forms.EmailInput(attrs={'placeholder': 'Email', 'class': 'form-control'}))
-	captcha = ReCaptchaField(widget=ReCaptchaV2Checkbox())
 	
 	class Meta:
 		model = Customer

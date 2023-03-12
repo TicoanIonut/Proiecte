@@ -143,7 +143,7 @@ class CheckoutView(EcomMixin, CreateView):
 		if request.user.is_authenticated and request.user.customer:
 			pass
 		else:
-			return redirect('/login/?next=checkout/')
+			return redirect('/login')
 		return super().dispatch(request, *args, **kwargs)
 	
 	def get_context_data(self, **kwargs):
@@ -219,7 +219,7 @@ class CustomerRegistrationView(EcomMixin, CreateView):
 		except Exception as e:
 			messages.error(self.request, f"Failed to send activation email: {str(e)}")
 		return super().form_valid(form)
-
+	
 
 class CustomerLogoutView(View):
 	def get(self, request):

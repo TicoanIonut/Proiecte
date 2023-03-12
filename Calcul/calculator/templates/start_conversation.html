@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block title %} Start Conversations {% endblock %}
+{% block content %}
+    <h1>Start a new conversation</h1>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="recipient">Recipient:</label>
+            <select name="user_id" class="form-control" id="recipient">
+                {% for user in users %}
+                    <option value="{{ user.id }}">{{ user.username }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="message">Message:</label>
+            <textarea name="message" class="form-control" id="message"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Start conversation</button>
+    </form>
+{% endblock %}
