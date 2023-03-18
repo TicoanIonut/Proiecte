@@ -1,31 +1,23 @@
 {% extends 'base.html' %}
-{% block title %} Conversations {% endblock %}
+{% block title %} Conversation with {{ recipient }} {% endblock %}
 {% block content %}
-    <h1>Conversation with {{ conversation.members.exclude(id=request.user.id).first().username }}</h1>
-    <div class="row">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-body">
-                    {% for message in messages %}
-                        <div class="mb-3">
-                            <h5>{{ message.created_by.username }}</h5>
-                            <p>{{ message.content }}</p>
-                            <small class="text-muted">{{ message.created_at|date:'M d, Y H:i' }}</small>
-                        </div>
-                    {% empty %}
-                        <p>No messages yet.</p>
-                    {% endfor %}
-                </div>
-            </div>
-            <div class="card mt-3">
-                <div class="card-body">
-                    <form method="post">
-                        {% csrf_token %}
-                        {{ form.as_p }}
-                        <button type="submit" class="btn btn-primary">Send</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
+  <h1>Conversation with {{ recipient_username }}</h1>
+  {% for message in messages %}
+    {% if message.created_by == request.user %}
+      <div>
+        <p>You:</p>
+        <p>{{ message.content }}</p>
+      </div>
+    {% else %}
+      <div>
+        <p>{{ message.created_by.username }}:</p>
+        <p>{{ message.content }}</p>
+      </div>
+    {% endif %}
+  {% endfor %}
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Send</button>
+  </form>
 {% endblock %}

@@ -7,6 +7,8 @@ from .forms import ConversationMessageForm
 def view_conversation(request, conversation_id):
     conversation = get_object_or_404(Conversation, id=conversation_id, members=request.user)
     messages = conversation.mesages.order_by('created_at')
+    recipient = conversation.members.exclude(id=request.user.id).first()
+    recipient_username = recipient.username
     if request.method == 'POST':
         form = ConversationMessageForm(request.POST)
         if form.is_valid():
@@ -21,8 +23,9 @@ def view_conversation(request, conversation_id):
         'conversation': conversation,
         'messages': messages,
         'form': form,
+        'recipient_username': recipient_username,
     }
-    return render(request, 'start_conversation.html', context)
+    return render(request, 'conversation.html', context)
 
 
 def start_conversation(request):
