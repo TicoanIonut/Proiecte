@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'calculator',
     'chatbotGPT',
-    'conversation'
+    'blogpost',
 ]
 
 MIDDLEWARE = [
