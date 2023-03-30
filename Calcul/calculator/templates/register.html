@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="col-md-6 offset-md-3">
+<h1>Register</h1>
+<br/>
+
+<form method="POST" action="">
+    {% csrf_token %}
+    {% for field in form %}
+    {{ field.label }} {{ field }}<br>
+    {% endfor %}
+	<br/>
+  	<button type="submit" class="btn btn-secondary">Register</button>
+</form>
+<a href="{% url 'register_user' %}">If you allredy registered, you can login Here</a>
+</div>
+
+
+{% endblock %}

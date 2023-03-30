@@ -21,4 +21,5 @@ urlpatterns = [
     path('', include('calculator.urls')),
     path('', include('chatbotGPT.urls')),
     path('', include('blogpost.urls')),
+    path('', include('user_manage.urls')),
 ]
