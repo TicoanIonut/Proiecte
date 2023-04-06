@@ -1,6 +1,8 @@
 from django.urls import path
-from .views import *
+from . import views
+
 
 urlpatterns = [
-    path('conversation/', view_conversation, name='view_conversation'),
+    path('conversation/', views.view_conversation, name='view_conversation'),
+    path('delete_msg/<int:blog_id>', views.delete_msg, name='delete_msg'),
 ]

@@ -10,7 +10,9 @@
             <br/>
             {% for msg in message %}
             <div class="alert alert-dark" role="alert">
-                {{ msg.content }}<br/>
+                {{ msg.content }}
+                <a href="{% url 'delete_msg' msg.id %}" style="float:right; margin-right:1%;" class="btn btn-primary">Delete</a>
+                <br/>
                 <small class="text-muted">
                     ({{ msg.created_at}}) By @{{ msg.members.username }}
                 </small>
