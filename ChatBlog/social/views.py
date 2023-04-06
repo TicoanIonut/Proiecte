@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from .models import Profile, Meep
 from .forms import MeepForm, SignUpForm, ProfilePicForm
@@ -113,3 +113,14 @@ def update_user(request):
 		return redirect('home')
 	
 
+def meep_like(request, pk):
+	if request.user.is_authenticated:
+		meep = get_object_or_404(Meep, id=pk)
+		if meep.likes.filter(id=request.user.id):
+			meep.likes.remove(request.user)
+		else:
+			meep.likes.add(request.user)
+		return redirect('home')
+	else:
+		messages.success(request, ('You must be logged in'))
+		return redirect('home')
