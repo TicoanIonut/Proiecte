@@ -1,0 +1,78 @@
+{% extends 'adminpages/adminbase.html' %}
+{% block title %}All Customers{% endblock %}
+
+
+{% block content %}
+<div class="container" xmlns="http://www.w3.org/1999/html">
+    <div class="row">
+        <div class="col-md-12">
+            <br>
+            </br>
+            <div style="display: flex; align-items: center;">
+                <form class="d-flex" method="GET" action="{% url 'ecomm:admincustomersearch' %}">
+                    {% csrf_token %}
+                    <input class="form-control me-2" type="search" placeholder="Search Customer" aria-label="Search"
+                           style="margin:10px; border-radius: 5px;" name="search" required>
+                    <button class="btn btn-info" type="submit" style="margin:10px; border-radius: 5px;">Search</button>
+                </form>
+                <h3>All Customers</h3>
+            </div>
+
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>SN</th>
+                    <th>Full Name</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Address</th>
+                    <th>Joined on</th>
+                    <th>Activate/Decativate</th>
+                    <th>Delete</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for p in allcustomers %}
+                <tr>
+                    <td>{{forloop.counter}}</td>
+                    <td><a href="">{{p.full_name}}</a></td>
+                    <td><a href="">{{ p.user.username }}</a></td>
+                    <td>{{p.user.email}}</td>
+                    <td>{{p.address}}</td>
+                    <td>{{p.joined_on}}</td>
+                    <td><a href="" class="btn btn-info" style="">Activate/Deactivate</a></td>
+                    <td><a href="" class="btn btn-danger" style="">Delete</a></td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<nav aria-label="..." class="">
+    <ul class="pagination justify-content-center">
+        {% if allcustomers.has_previous %}
+        <li class="page-item"><a class="page-link text-info" href="?page=1">First</a></li>
+        <li class="page-item">
+            <a class="page-link text-info" href="?page={{ allcustomers.previous_page_number }}">Previous</a>
+        </li>
+        {% endif %}
+        {% for i in allcustomers.paginator.page_range %}
+        {% if i == allcustomers.number %}
+        <li class="page-item active"><a class="page-link bg-info">{{i}}</a></li>
+        {% else %}
+        <li class="page-item "><a class="page-link text-info" href="?page={{i}}">{{i}}</a></li>
+        {% endif %}
+        {% endfor %}
+
+        {% if allcustomers.has_next %}
+        <li class="page-item">
+            <a class="page-link text-info" href="?page={{ allcustomers.next_page_number }}">Next</a>
+        </li>
+        <li class="page-item"><a class="page-link text-info" href="?page={{ allcustomers.paginator.num_pages }}">Last
+        </a></li>
+        {% endif %}
+    </ul>
+</nav>
+
+{% endblock %}

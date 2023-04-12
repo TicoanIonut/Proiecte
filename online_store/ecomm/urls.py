@@ -19,6 +19,7 @@ urlpatterns = [
 	path("profile/order-<int:pk>/", CustomerOrderDetailView.as_view(), name="customerorderdetail"),
 	path("search/", SearchView.as_view(), name="searches"),
 	# path("search/", views.searches, name="searches"),
+
 	path("forgot-password/", PasswordForgotView.as_view(), name="passwordforgot"),
 	path("password-reset/<email>/<token>/", PasswordResetView.as_view(), name="passwordreset"),
 	path('activate/<str:uidb64>/<str:token>/', activate, name='activate'),
@@ -30,6 +31,9 @@ urlpatterns = [
 	path("admin-order-<int:pk>-change/", AdminOrderStatusChangeView.as_view(), name="adminorderstatuschange"),
 	path("admin-product/list/", AdminProductListView.as_view(), name="adminproductlist"),
 	path("admin-product/add/", AdminProductCreateView.as_view(), name="adminproductcreate"),
-	
-	
+	path("admin-product/edit/<int:prod_id>/", views.edit_product, name="adminproductedit"),
+	path("admin-product/delete/<int:prod_id>/", views.delete_product, name="adminproductdelete"),
+	path("adminsearch/", AdminSearchView.as_view(), name="adminsearches"),
+	path("admin-customer/list/", AdminCustomerListView.as_view(), name="admincustomerlist"),
+	path("admin-customer-search/", AdminCustomerSearchView.as_view(), name="admincustomersearch"),
 ]

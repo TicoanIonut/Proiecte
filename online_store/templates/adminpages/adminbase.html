@@ -11,7 +11,7 @@
         <a class="btn btn-outline-dark btn-secndary"  href="{% url 'ecomm:adminhome' %}">Admin Home/Received Orders</a>
         <a class="btn btn-outline-dark btn-info" href="{% url 'ecomm:adminorderlist' %}">All Orders</a>
         <a class="btn btn-outline-dark btn-info" href="{% url 'ecomm:adminproductlist' %}">All Products</a>
-        <a class="btn btn-outline-dark btn-info" href="">All Customers</a>
+        <a class="btn btn-outline-dark btn-info" href="{% url 'ecomm:admincustomerlist' %}">All Customers</a>
         <a class="btn btn-outline-dark btn-secondary" href="{% url 'ecomm:home' %}">Visit site</a>
     </div>
     {% block content %}

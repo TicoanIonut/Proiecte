@@ -136,46 +136,35 @@ def active_users(request, user_id):
 		return redirect('super_menue_users')
 
 
+def get_tickets(request, sorting_criteria):
+    p = Paginator(Ticket.objects.order_by(sorting_criteria), 8)
+    page = request.GET.get('page')
+    tickets = p.get_page(page)
+    return render(request, 'index.html', {'tickets': tickets})
+
+
 def index(request):
-	p = Paginator(Ticket.objects.order_by('-created_at'), 8)
-	page = request.GET.get('page')
-	tickets = p.get_page(page)
-	return render(request, 'index.html', {'tickets': tickets})
+    return get_tickets(request, '-created_at')
 
 
 def index_updated(request):
-	p = Paginator(Ticket.objects.order_by('-updated_at'), 8)
-	page = request.GET.get('page')
-	tickets = p.get_page(page)
-	return render(request, 'index.html', {'tickets': tickets})
+    return get_tickets(request, '-updated_at')
 
 
 def status_updated(request):
-	p = Paginator(Ticket.objects.order_by('-status'), 8)
-	page = request.GET.get('page')
-	tickets = p.get_page(page)
-	return render(request, 'index.html', {'tickets': tickets})
+    return get_tickets(request, '-status')
 
 
 def status_compartment(request):
-	p = Paginator(Ticket.objects.order_by('-compartment'), 8)
-	page = request.GET.get('page')
-	tickets = p.get_page(page)
-	return render(request, 'index.html', {'tickets': tickets})
+    return get_tickets(request, '-compartment')
 
 
 def status_created_by(request):
-	p = Paginator(Ticket.objects.order_by('-assignee'), 8)
-	page = request.GET.get('page')
-	tickets = p.get_page(page)
-	return render(request, 'index.html', {'tickets': tickets})
+    return get_tickets(request, '-assignee')
 
 
 def status_summary(request):
-	p = Paginator(Ticket.objects.order_by('-title'), 8)
-	page = request.GET.get('page')
-	tickets = p.get_page(page)
-	return render(request, 'index.html', {'tickets': tickets})
+    return get_tickets(request, '-title')
 
 
 @login_required
@@ -197,13 +186,6 @@ def searches(request):
 		context['search_query'] = res
 		context['search_url'] = f'?search={res}&'
 	return render(request, 'search.html', context)
-
-# def index_search(request):
-# 	search = request.GET.get('search')
-# 	tickets = Ticket.objects.filter(Q(title__icontains=search) | Q(compartment__icontains=search) |
-# 	                                Q(id__icontains=search) | Q(created_at__icontains=search) |
-# 	                                Q(updated_at__icontains=search) | Q(status__icontains=search))
-# 	return render(request, 'search.html', {'tickets': tickets, 'search': search})
 
 
 @login_required

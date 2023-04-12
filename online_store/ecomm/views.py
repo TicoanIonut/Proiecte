@@ -5,7 +5,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import send_mail, EmailMessage
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Q
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
 from django.template.loader import render_to_string
 from django.urls import reverse_lazy, reverse
 from django.utils.encoding import force_bytes, force_str
@@ -50,9 +50,11 @@ class ProductDetailView(EcomMixin, TemplateView):
 		context = super().get_context_data(**kwargs)
 		url_slug = self.kwargs['slug']
 		product = Product.objects.get(slug=url_slug)
+		product.view_count += 1
+		product.save()
 		context['product'] = product
 		return context
-
+	
 
 class AddToCartView(EcomMixin, TemplateView):
 	template_name = "home.html"
@@ -219,7 +221,7 @@ class CustomerRegistrationView(EcomMixin, CreateView):
 		except Exception as e:
 			messages.error(self.request, f"Failed to send activation email: {str(e)}")
 		return super().form_valid(form)
-	
+
 
 class CustomerLogoutView(View):
 	def get(self, request):
@@ -441,8 +443,103 @@ class AdminProductListView(AdminRequiredMixin, ListView):
 	queryset = Product.objects.all().order_by("-id")
 	context_object_name = "allproducts"
 
+	def get_context_data(self, **kwargs):
+		context = super().get_context_data(**kwargs)
+		queryset = Product.objects.all().order_by('-id')
+		paginator = Paginator(queryset, 7)
+		page_number = self.request.GET.get('page')
+		allproducts = paginator.get_page(page_number)
+		context['allproducts'] = allproducts
+		return context
+
 
 class AdminProductCreateView(AdminRequiredMixin, CreateView):
 	template_name = "adminpages/adminproductcreate.html"
 	form_class = ProductForm
 	success_url = reverse_lazy("ecomm:adminproductlist")
+
+
+def edit_product(request, prod_id):
+	product = Product.objects.get(pk=prod_id)
+	form = ProductForm(request.POST or None, instance=product)
+	if request.user.is_superuser or Admin.objects.filter(user=request.user):
+		if form.is_valid():
+			form.save()
+			return redirect('ecomm:adminproductlist')
+		return render(request, 'adminpages/adminproductedit.html', {'product': product, 'form': form})
+	return redirect('ecomm:adminproductlist')
+
+
+def delete_product(request, prod_id):
+	if request.user.is_superuser or Admin.objects.filter(user=request.user):
+		product = Product.objects.get(pk=prod_id)
+		product.delete()
+		return redirect('ecomm:adminproductlist')
+	return redirect('ecomm:adminproductlist')
+
+
+class AdminSearchView(EcomMixin, TemplateView):
+	template_name = 'adminpages/adminsearch.html'
+	
+	def get_context_data(self, **kwargs):
+		context = super().get_context_data(**kwargs)
+		searched_products = Product.objects.all()
+		kw = self.request.GET.get('search')
+		if kw:
+			searched_products = Product.objects.filter(Q(title__icontains=kw) | Q(description__icontains=kw)).order_by(
+				'title')
+		paginator = Paginator(searched_products, 7)
+		page = self.request.GET.get('page')
+		try:
+			results = paginator.page(page)
+		except PageNotAnInteger:
+			results = paginator.page(1)
+		except EmptyPage:
+			results = paginator.page(paginator.num_pages)
+		context['results'] = results
+		context['search_query'] = kw
+		if kw:
+			context['search_query'] = kw
+			context['search_url'] = f'?search={kw}&'
+		return context
+
+
+class AdminCustomerListView(AdminRequiredMixin, ListView):
+	template_name = "adminpages/admincustomerlist.html"
+	queryset = Customer.objects.all().order_by("-id")
+	context_object_name = "allcustomers"
+
+	def get_context_data(self, **kwargs):
+		context = super().get_context_data(**kwargs)
+		queryset = Customer.objects.all().order_by('-id')
+		paginator = Paginator(queryset, 7)
+		page_number = self.request.GET.get('page')
+		allcustomers = paginator.get_page(page_number)
+		context['allcustomers'] = allcustomers
+		return context
+
+
+class AdminCustomerSearchView(EcomMixin, TemplateView):
+	template_name = 'adminpages/admincustomersearch.html'
+	
+	def get_context_data(self, **kwargs):
+		context = super().get_context_data(**kwargs)
+		searched_products = Customer.objects.all()
+		kw = self.request.GET.get('search')
+		if kw:
+			searched_products = Customer.objects.filter(Q(full_name__icontains=kw) | Q(address__icontains=kw) |
+			                                            Q(joined_on__icontains=kw) | Q(user__username__icontains=kw))
+		paginator = Paginator(searched_products, 7)
+		page = self.request.GET.get('page')
+		try:
+			results = paginator.page(page)
+		except PageNotAnInteger:
+			results = paginator.page(1)
+		except EmptyPage:
+			results = paginator.page(paginator.num_pages)
+		context['results'] = results
+		context['search_query'] = kw
+		if kw:
+			context['search_query'] = kw
+			context['search_url'] = f'?search={kw}&'
+		return context

@@ -24,7 +24,7 @@
                         <td><a href="{% url 'ecomm:adminorderdetail' ord.id %}">#ORDER_{{ord.id}}</a></td>
                         <td>{{ord.ordered_by}}</td>
                         <td>{{ord.created_at}}</td>
-                        <td>{{ord.total}}</td>
+                        <td><strong>{{ord.total}} $</strong></td>
 
                     </tr>
                     {% endfor %}
