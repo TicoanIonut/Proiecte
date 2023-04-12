@@ -1,12 +1,13 @@
 {% extends 'adminpages/adminbase.html' %}
-{% block title %}All Products{% endblock %}
+{% block title %}Admin Search{% endblock %}
 
 
 {% block content %}
-<div class="container"> 
+
+<div class="container">
     <div class="row">
         <div class="col-md-12">
-            <h3>All Product list</h3><hr>
+            <h3>You searched for <span class="text-info">"{{request.GET.search}}"</span></h3><hr>
             <div style="display: flex; align-items: center;">
             <a href="{% url 'ecomm:adminproductcreate' %}" class="btn btn-info" style="margin:10px; border-radius: 5px;">Add New Product</a>
             <form class="d-flex" method="GET" action="{% url 'ecomm:adminsearches' %}" >
@@ -29,15 +30,15 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for p in allproducts %}
+                    {% for result in results %}
                     <tr>
                         <td>{{forloop.counter}}</td>
-                        <td><a href="{% url 'ecomm:productdetail' p.slug %}">{{p.title}}</a></td>
-                        <td><a href="{% url 'ecomm:productdetail' p.slug %}"><img src="{{p.image.url}}" style="height: 60px;" alt=""></a></td>
-                        <td><strong>{{p.price}} $</strong></td>
-                        <td>{{p.view_count}}</td>
-                        <td><a href="{% url 'ecomm:adminproductedit' p.id %}" class="btn btn-info" style="">Edit</a></td>
-                        <td><a href="{% url 'ecomm:adminproductdelete' p.id %}" class="btn btn-danger" style="">Delete</a></td>
+                        <td><a href="{% url 'ecomm:productdetail' result.slug %}">{{result.title}}</a></td>
+                        <td><a href="{% url 'ecomm:productdetail' result.slug %}"><img src="{{result.image.url}}" style="height: 60px;" alt=""></a></td>
+                        <td><strong>{{result.price}} $</strong></td>
+                        <td>{{result.view_count}}</td>
+                        <td><a href="{% url 'ecomm:adminproductedit' result.id %}" class="btn btn-info" style="">Edit</a></td>
+                        <td><a href="{% url 'ecomm:adminproductdelete' result.id %}" class="btn btn-danger" style="">Delete</a></td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -47,28 +48,26 @@
 </div>
 <nav aria-label="..." class="">
         <ul class="pagination justify-content-center">
-            {% if allproducts.has_previous %}
-            <li class="page-item"><a class="page-link text-info" href="?page=1">First</a></li>
+            {% if results.has_previous %}
+            <li class="page-item"><a class="page-link text-info" href="{{ search_url }}page=1">First</a></li>
             <li class="page-item">
-                <a class="page-link text-info" href="?page={{ allproducts.previous_page_number }}">Previous</a>
+                <a class="page-link text-info" href="{{ search_url }}page={{ results.previous_page_number }}">Previous</a>
               </li>
             {% endif %}
-            {% for i in allproducts.paginator.page_range %}
-            {% if i == allproducts.number %}
+            {% for i in results.paginator.page_range %}
+            {% if i == results.number %}
             <li class="page-item active"><a class="page-link bg-info">{{i}}</a></li>
             {% else %}
-            <li class="page-item "><a class="page-link text-info" href="?page={{i}}">{{i}}</a></li>
+            <li class="page-item"><a class="page-link text-info" href="{{ search_url }}page={{i}}">{{i}}</a></li>
             {% endif %}
             {% endfor %}
-
-            {% if allproducts.has_next %}
+            {% if results.has_next %}
             <li class="page-item">
-                <a class="page-link text-info" href="?page={{ allproducts.next_page_number }}">Next</a>
+                <a class="page-link text-info" href="{{ search_url }}page={{ results.next_page_number }}">Next</a>
             </li>
-            <li class="page-item"><a class="page-link text-info" href="?page={{ allproducts.paginator.num_pages }}">Last
+            <li class="page-item"><a class="page-link text-info" href="{{ search_url }}page={{ results.paginator.num_pages }}">Last
                     </a></li>
             {% endif %}
         </ul>
       </nav>
-
 {% endblock %}

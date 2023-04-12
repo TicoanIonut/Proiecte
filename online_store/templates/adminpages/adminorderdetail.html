@@ -41,11 +41,11 @@
                     <tr>
                         <td>{{forloop.counter}}</td>
                         <td><a style=" color: black;"
-                               href="{% url 'ecomm:productdetail' cp.product.slug %}">{{cp.product.title}}({{cp.product.id}})</a>
+                               href="{% url 'ecomm:productdetail' cp.product.slug %}">{{cp.product.title}}</a>
                         </td>
-                        <td>{{cp.rate}}</td>
+                        <td><strong>{{cp.rate}} $</strong></td>
                         <td>{{cp.quantity}}</td>
-                        <td>{{cp.subtotal}}</td>
+                        <td><strong>{{cp.subtotal}} $</strong></td>
                     </tr>
                     {% endfor %}
                     <tr>
