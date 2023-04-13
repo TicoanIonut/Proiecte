@@ -1,5 +1,26 @@
 {% extends 'base.html' %}
-{% block title %} Home {% endblock %}
+{% block title %} Weather {% endblock %}
 {% block content %}
-<h1>WELCOME TO THE PROJECT</h1>
+<h1>Weather</h1>
+
+
+<form method="post">
+  {% csrf_token %}
+  <input type="text" name="city1" placeholder="Enter city 1">
+  <input type="text" name="city2" placeholder="Enter city 2">
+  <button type="submit">Compare Weather</button>
+</form>
+
+<div class="comparison-container">
+  {% if weather_data1 %}
+    <div class="city-container">
+      {% include 'weather.html' with weather_data=weather_data1 daily_forecasts=daily_forecasts1 %}
+    </div>
+  {% endif %}
+  {% if weather_data2 %}
+    <div class="city-container">
+      {% include 'weather.html' with weather_data=weather_data2 daily_forecasts=daily_forecasts2 %}
+    </div>
+  {% endif %}
+</div>
 {% endblock %}
