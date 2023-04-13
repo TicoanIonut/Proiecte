@@ -36,4 +36,8 @@ urlpatterns = [
 	path("adminsearch/", AdminSearchView.as_view(), name="adminsearches"),
 	path("admin-customer/list/", AdminCustomerListView.as_view(), name="admincustomerlist"),
 	path("admin-customer-search/", AdminCustomerSearchView.as_view(), name="admincustomersearch"),
+	path("admin-delete-customers/<int:customer_id>/", views.delete_users, name="admindeletecustomers"),
+	path("admin-toggle-customers/<int:customer_id>/", views.toggle_user_active, name="admintogglecustomers"),
+	path("admin-edit-customers/<int:customer_id>/", views.admin_edit_customers, name="admineditcustomers"),
+	path("edit-customers/<int:customer_id>/", views.edit_customers, name="editcustomers"),
 ]

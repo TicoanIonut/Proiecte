@@ -19,8 +19,9 @@
         <div class="form-inline my-2 my-lg-0" style="margin-top:1%;">
 
 
-
-
+            {% if user.is_superuser or user.admin %}
+            <a class="btn btn-info" style="margin:10px; border-radius: 5px;"  href="{% url 'ecomm:adminhome' %}">Admin Home</a>
+            {% endif %}
             {% if request.user.customer %}
              <span style="color:#ffff">Hi, {{ request.user.username }} </span>
             <a class="btn btn-info" href="{% url 'ecomm:customerprofile' %}" style="margin:10px; border-radius: 5px;">My Profile</a>

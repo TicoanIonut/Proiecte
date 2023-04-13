@@ -1,5 +1,7 @@
-from django.db import models
 from django.contrib.auth.models import User
+from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 
 class Admin(models.Model):
@@ -19,6 +21,12 @@ class Customer(models.Model):
 	joined_on = models.DateTimeField(auto_now_add=True)
 
 
+@receiver(post_save, sender=User)
+def create_customer(sender, instance, created, **kwargs):
+	if created:
+		Customer.objects.create(user=instance)
+
+
 class Product(models.Model):
 	title = models.CharField(max_length=200)
 	slug = models.SlugField(unique=True)
@@ -26,11 +34,11 @@ class Product(models.Model):
 	price = models.PositiveIntegerField()
 	description = models.TextField()
 	view_count = models.PositiveIntegerField(default=0)
-
+	
 	def __str__(self):
 		return self.title
-	
-	
+
+
 class Cart(models.Model):
 	customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, null=True, blank=True)
 	total = models.PositiveIntegerField(default=0)
@@ -69,8 +77,8 @@ class CartProduct(models.Model):
 	
 	def __str__(self):
 		return 'Cart' + str(self.cart.id) + 'CartProduct: ' + str(self.id)
-	
-	
+
+
 ORDER_STATUS = (
 	("Order Received", "Order Received"),
 	("Order Processing", "Order Processing"),
@@ -102,4 +110,3 @@ class Order(models.Model):
 	
 	def __str__(self):
 		return 'Order' + str(self.id)
-	
