@@ -1,16 +1,17 @@
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout, get_user_model
+from django.contrib.auth.decorators import login_required
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import send_mail, EmailMessage
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Q
-from django.shortcuts import redirect, render, get_object_or_404
+from django.shortcuts import redirect, render
 from django.template.loader import render_to_string
 from django.urls import reverse_lazy, reverse
 from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-from django.views.generic import TemplateView, View, CreateView, FormView, DetailView, ListView
+from django.views.generic import TemplateView, View, CreateView, FormView, DetailView, ListView, UpdateView
 
 from .forms import *
 from .models import *
@@ -54,7 +55,7 @@ class ProductDetailView(EcomMixin, TemplateView):
 		product.save()
 		context['product'] = product
 		return context
-	
+
 
 class AddToCartView(EcomMixin, TemplateView):
 	template_name = "home.html"
@@ -442,7 +443,7 @@ class AdminProductListView(AdminRequiredMixin, ListView):
 	template_name = "adminpages/adminproductlist.html"
 	queryset = Product.objects.all().order_by("-id")
 	context_object_name = "allproducts"
-
+	
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
 		queryset = Product.objects.all().order_by('-id')
@@ -508,7 +509,7 @@ class AdminCustomerListView(AdminRequiredMixin, ListView):
 	template_name = "adminpages/admincustomerlist.html"
 	queryset = Customer.objects.all().order_by("-id")
 	context_object_name = "allcustomers"
-
+	
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
 		queryset = Customer.objects.all().order_by('-id')
@@ -543,3 +544,79 @@ class AdminCustomerSearchView(EcomMixin, TemplateView):
 			context['search_query'] = kw
 			context['search_url'] = f'?search={kw}&'
 		return context
+
+
+def delete_users(request, customer_id):
+	if request.user.is_superuser or Admin.objects.filter(user=request.user):
+		customers = Customer.objects.get(pk=customer_id)
+		customers.delete()
+		return redirect('ecomm:admincustomerlist')
+	return render(request, 'ecomm:admincustomerlist')
+
+
+def toggle_user_active(request, customer_id):
+	if request.user.is_superuser or Admin.objects.filter(user=request.user).exists():
+		customers = Customer.objects.get(pk=customer_id)
+		if customers.user.is_active:
+			customers.user.is_active = False
+		else:
+			customers.user.is_active = True
+		customers.user.save()
+		return redirect('ecomm:admincustomerlist')
+	return redirect('ecomm:admincustomerlist')
+
+
+# class CustomerEditView(EcomMixin, UpdateView):
+# 	template_name = "customerregistration.html"
+# 	form_class = CustomerRegistrationForm
+# 	success_url = reverse_lazy("ecomm:customerregistration")
+#
+# 	def dispatch(self, request, *args, **kwargs):
+# 		customer_id = kwargs.get("pk")
+# 		if customer_id:
+# 			customer = Customer.objects.get(pk=customer_id)
+# 			if not (request.user.is_superuser or customer.user == request.user):
+# 				messages.error(request, "You are not authorized to edit this account.")
+# 				return redirect(request.META.get("HTTP_REFERER"))
+# 		elif not request.user.is_superuser:
+# 			messages.error(request, "You are not authorized to create new accounts.")
+# 			return redirect(request.META.get("HTTP_REFERER"))
+# 		return super().dispatch(request, *args, **kwargs)
+#
+# 	def form_valid(self, form):
+# 		customer_id = self.kwargs.get("pk")
+# 		customer = Customer.objects.get(pk=customer_id)
+# 		user = customer.user
+# 		if user == self.request.user or self.request.user.is_superuser:
+# 			username = form.cleaned_data.get("username")
+# 			password = form.cleaned_data.get("password")
+# 			email = form.cleaned_data.get("email")
+# 			user.username = username
+# 			user.email = email
+# 			if password:
+# 				user.set_password(password)
+# 			user.save()
+# 			messages.success(self.request, "Account updated successfully.")
+# 			return super().form_valid(form)
+# 		else:
+# 			messages.error(self.request, "You are not authorized to edit this account.")
+# 			return redirect(self.request.META.get("HTTP_REFERER"))
+
+@login_required
+def admin_edit_customers(request, customer_id):
+	customers = Customer.objects.get(pk=customer_id)
+	form = CustomerRegistrationForm(request.POST or None, instance=customers)
+	if form.is_valid():
+		form.save()
+		return redirect('ecomm:admincustomerlist')
+	return render(request, 'adminpages/admineditcustomers.html', {'customers': customers, 'form': form})
+
+
+@login_required
+def edit_customers(request, customer_id):
+	customers = Customer.objects.get(pk=customer_id)
+	form = CustomerRegistrationForm(request.POST or None, instance=customers)
+	if form.is_valid():
+		form.save()
+		return redirect('ecomm:customerprofile')
+	return render(request, 'customersedit.html', {'customers': customers, 'form': form})

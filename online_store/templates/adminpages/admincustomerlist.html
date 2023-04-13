@@ -27,6 +27,8 @@
                     <th>Email</th>
                     <th>Address</th>
                     <th>Joined on</th>
+                    <th>Is active</th>
+                    <th>Edit</th>
                     <th>Activate/Decativate</th>
                     <th>Delete</th>
                 </tr>
@@ -35,13 +37,15 @@
                 {% for p in allcustomers %}
                 <tr>
                     <td>{{forloop.counter}}</td>
-                    <td><a href="">{{p.full_name}}</a></td>
-                    <td><a href="">{{ p.user.username }}</a></td>
+                    <td>{{p.full_name}}</td>
+                    <td>{{ p.user.username }}</td>
                     <td>{{p.user.email}}</td>
                     <td>{{p.address}}</td>
                     <td>{{p.joined_on}}</td>
-                    <td><a href="" class="btn btn-info" style="">Activate/Deactivate</a></td>
-                    <td><a href="" class="btn btn-danger" style="">Delete</a></td>
+                    <td>{{p.user.is_active}}</td>
+                    <td><a href="{% url 'ecomm:admineditcustomers' p.id %}" class="btn btn-info" style="">Edit</a></td>
+                    <td><a href="{% url 'ecomm:admintogglecustomers' p.id %}" class="btn btn-info" style="">Activate/Deactivate</a></td>
+                    <td><a href="{% url 'ecomm:admindeletecustomers' p.id %}" class="btn btn-danger" style="">Delete</a></td>
                 </tr>
                 {% endfor %}
                 </tbody>

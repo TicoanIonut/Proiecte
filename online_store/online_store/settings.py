@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 
 
 # Application definition
+SITE_ID = 2
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -41,7 +42,24 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'ecomm',
     'captcha',
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
 ]
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': [
+            'profile',
+            'email',
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'online',
+        },
+    }
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -141,3 +159,12 @@ EMAIL_HOST_PASSWORD = EMAIL_PASSWORD_HOST
 RECAPTCHA_PUBLIC_KEY = R_PUB_K
 RECAPTCHA_PRIVATE_KEY = R_PRIV_K
 SILENCED_SYSTEM_CHECKS = ['captcha_recaptcha_test_key_error']
+
+
+AUTHENTICATION_BACKENDS = (
+    "django.contrib.auth.backends.ModelBackend",
+    "allauth.account.auth_backends.AuthenticationBackend"
+)
+
+LOGIN_REDIRECT_URL = "/"
+LOGOUT_REDIRECT_URL = "/"

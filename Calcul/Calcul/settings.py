@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'chatbotGPT',
     'blogpost',
     'user_manage',
+    'weather',
 ]
 
 MIDDLEWARE = [

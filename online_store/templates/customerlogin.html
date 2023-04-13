@@ -22,6 +22,8 @@
             {{error}}
             {% endif %}
         </form>
+        {% load socialaccount %}
+        <p class="text-left">Login with Google? <a href="{% provider_login_url 'google' %}?next=/">Login</a>.</p>
         <p class="text-left">Don't have an account? <a href="{%url 'ecomm:customerregistration' %}">Register</a>.</p>
         <p class="text-left">Forgot password? <a href="{%url 'ecomm:passwordforgot' %}">Reset now</a>.</p>
 </div>
