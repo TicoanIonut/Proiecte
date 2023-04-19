@@ -6,12 +6,12 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import send_mail, EmailMessage
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Q
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
 from django.template.loader import render_to_string
 from django.urls import reverse_lazy, reverse
 from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-from django.views.generic import TemplateView, View, CreateView, FormView, DetailView, ListView, UpdateView
+from django.views.generic import TemplateView, View, CreateView, FormView, DetailView, ListView
 
 from .forms import *
 from .models import *
@@ -160,10 +160,33 @@ class CheckoutView(EcomMixin, CreateView):
 			form.instance.cart = cart_obj
 			form.instance.subtotal = cart_obj.total
 			form.instance.total = cart_obj.total
+			fullname = form.cleaned_data.get("ordered_by")
+			shipping = form.cleaned_data.get("shipping_address")
+			telephone = form.cleaned_data.get("mobile")
+			mail = form.cleaned_data.get("email")
+			payment = form.cleaned_data.get("payment_method")
+			order_items = cart_obj.cartproduct_set.all()
+			send_order(fullname, shipping, telephone, mail, payment, order_items)
 			del self.request.session['cart_id']
 		else:
 			return redirect('ecomm:home')
 		return super().form_valid(form)
+
+
+def send_order(fullname, shipping, telephone, mail, payment, order_items):
+	subject = "Your order summary."
+	context = {
+		'fullname': fullname,
+		'shipping': shipping,
+		'telephone': telephone,
+		'mail': mail,
+		'payment': payment,
+		'order_items': order_items,
+	}
+	message = render_to_string('order_summary.html', context)
+	email = EmailMessage(subject, message, to=[mail])
+	email.content_subtype = 'html'
+	email.send()
 
 
 def activate(request, uidb64, token):
@@ -528,8 +551,9 @@ class AdminCustomerSearchView(EcomMixin, TemplateView):
 		searched_products = Customer.objects.all()
 		kw = self.request.GET.get('search')
 		if kw:
-			searched_products = Customer.objects.filter(Q(full_name__icontains=kw) | Q(address__icontains=kw) |
-			                                            Q(joined_on__icontains=kw) | Q(user__username__icontains=kw))
+			searched_products = Customer.objects.filter(
+				Q(full_name__icontains=kw) | Q(address__icontains=kw) | Q(joined_on__icontains=kw) | Q(
+					user__username__icontains=kw))
 		paginator = Paginator(searched_products, 7)
 		page = self.request.GET.get('page')
 		try:
@@ -566,57 +590,36 @@ def toggle_user_active(request, customer_id):
 	return redirect('ecomm:admincustomerlist')
 
 
-# class CustomerEditView(EcomMixin, UpdateView):
-# 	template_name = "customerregistration.html"
-# 	form_class = CustomerRegistrationForm
-# 	success_url = reverse_lazy("ecomm:customerregistration")
-#
-# 	def dispatch(self, request, *args, **kwargs):
-# 		customer_id = kwargs.get("pk")
-# 		if customer_id:
-# 			customer = Customer.objects.get(pk=customer_id)
-# 			if not (request.user.is_superuser or customer.user == request.user):
-# 				messages.error(request, "You are not authorized to edit this account.")
-# 				return redirect(request.META.get("HTTP_REFERER"))
-# 		elif not request.user.is_superuser:
-# 			messages.error(request, "You are not authorized to create new accounts.")
-# 			return redirect(request.META.get("HTTP_REFERER"))
-# 		return super().dispatch(request, *args, **kwargs)
-#
-# 	def form_valid(self, form):
-# 		customer_id = self.kwargs.get("pk")
-# 		customer = Customer.objects.get(pk=customer_id)
-# 		user = customer.user
-# 		if user == self.request.user or self.request.user.is_superuser:
-# 			username = form.cleaned_data.get("username")
-# 			password = form.cleaned_data.get("password")
-# 			email = form.cleaned_data.get("email")
-# 			user.username = username
-# 			user.email = email
-# 			if password:
-# 				user.set_password(password)
-# 			user.save()
-# 			messages.success(self.request, "Account updated successfully.")
-# 			return super().form_valid(form)
-# 		else:
-# 			messages.error(self.request, "You are not authorized to edit this account.")
-# 			return redirect(self.request.META.get("HTTP_REFERER"))
-
 @login_required
 def admin_edit_customers(request, customer_id):
-	customers = Customer.objects.get(pk=customer_id)
-	form = CustomerRegistrationForm(request.POST or None, instance=customers)
-	if form.is_valid():
+	customer = get_object_or_404(Customer, id=customer_id)
+	user = customer.user
+	form = CustomerRegistrationForm(request.POST or None, instance=customer)
+	user_form = CustomerRegistrationForm(request.POST or None, instance=user)
+	if form.is_valid() and user_form.is_valid():
+		user = user_form.save(commit=False)
+		password = user_form.cleaned_data.get('password')
+		if password:
+			user.set_password(password)
+		user.save()
 		form.save()
 		return redirect('ecomm:admincustomerlist')
-	return render(request, 'adminpages/admineditcustomers.html', {'customers': customers, 'form': form})
+	return render(request, 'adminpages/admineditcustomers.html',
+	              {'customers': customer, 'form': form, 'user_form': user_form})
 
 
 @login_required
 def edit_customers(request, customer_id):
-	customers = Customer.objects.get(pk=customer_id)
-	form = CustomerRegistrationForm(request.POST or None, instance=customers)
-	if form.is_valid():
+	customer = get_object_or_404(Customer, id=customer_id)
+	user = customer.user
+	form = CustomerRegistrationForm(request.POST or None, instance=customer)
+	user_form = CustomerRegistrationForm(request.POST or None, instance=user)
+	if form.is_valid() and user_form.is_valid():
+		user = user_form.save(commit=False)
+		password = user_form.cleaned_data.get('password')
+		if password:
+			user.set_password(password)
+		user.save()
 		form.save()
 		return redirect('ecomm:customerprofile')
-	return render(request, 'customersedit.html', {'customers': customers, 'form': form})
+	return render(request, 'customersedit.html', {'customers': customer, 'form': form, 'user_form': user_form})

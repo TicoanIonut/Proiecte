@@ -1,0 +1,54 @@
+<html>
+<head>
+	<title>Order Summary</title>
+	<style>
+		table {
+			width: 100%;
+			border-collapse: collapse;
+		}
+		th, td {
+			padding: 8px;
+			text-align: left;
+			border-bottom: 1px solid #ddd;
+		}
+	</style>
+</head>
+<body>
+	<h1>Order Summary</h1>
+	<p>Hello {{ fullname }},</p>
+	<p>Thank you for your order! Here are the details:</p>
+	<ul>
+		<li>Shipping Address: {{ shipping }}</li>
+		<li>Phone Number: {{ telephone }}</li>
+		<li>Payment Method: {{ payment }}</li>
+	</ul>
+	<table>
+		<thead>
+			<tr>
+				<th>Item</th>
+				<th>Price</th>
+				<th>Quantity</th>
+				<th>Subtotal</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for item in order_items %}
+			<tr>
+				<td>{{ item.product.title }}</td>
+				<td>{{ item.product.price|floatformat:2 }} $</td>
+				<td>{{ item.quantity }}</td>
+				<td>{{ item.subtotal|floatformat:2 }} $</td>
+
+			</tr>
+			{% endfor %}
+			<tr>
+				<td><strong>Total</strong></td>
+				<td><strong>{{ order_items.get_total|floatformat:2  }} 1$</strong></td>
+				<td><strong>{{ cart.get_cart_total|floatformat:2 }} 2$</strong></td>
+				<td><strong>{{ order_items.cart.get_cart_total|floatformat:2 }} 3$</strong></td>
+				<td><strong>{{ order_items.cart.get_cart_total|floatformat:2 }} 4$</strong></td>
+			</tr>
+		</tbody>
+	</table>
+</body>
+</html>

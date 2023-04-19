@@ -9,12 +9,13 @@ from .models import Order, Customer, Product
 class CheckoutForm(forms.ModelForm):
 	class Meta:
 		model = Order
-		fields = ['ordered_by', 'shipping_address', 'mobile', 'email']
+		fields = ['ordered_by', 'shipping_address', 'mobile', 'email', "payment_method"]
 		widgets = {
 			'ordered_by': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Full Name'}),
 			'shipping_address': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Address'}),
 			'mobile': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Telephone'}),
 			'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Email'}),
+			'payment_method': forms.Select(attrs={'class': 'form-control', 'placeholder': ''}),
 		}
 
 

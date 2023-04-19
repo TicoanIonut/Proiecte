@@ -1,11 +1,12 @@
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, authenticate, logout
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.db.models import Q
 from django.shortcuts import render, redirect
+
 from .forms import *
 from .models import *
-from django.db.models import Q
 
 
 @login_required
@@ -67,7 +68,7 @@ def edit_users(request, user_id):
 			return redirect('super_menue_users')
 		return render(request, 'EditUsers.html', {'users': users, 'form': form})
 	return render(request, 'EditUsers.html', {'users': users, 'form': form})
-	
+
 
 @login_required
 def delete_ticket(request, ticket_id):
@@ -93,12 +94,12 @@ def delete_users(request, user_id):
 @login_required
 def inactive_ticket(request, ticket_id):
 	ticket = Ticket.objects.get(pk=ticket_id)
-	if request.user == ticket.assignee or request.user.is_superuser or\
+	if request.user == ticket.assignee or request.user.is_superuser or \
 			request.user.usercreate.compartment == ticket.compartment:
 		ticket.active = 0
 		ticket.save()
 		return redirect('index')
-	
+
 
 @login_required
 def deactivate_ticket(request, ticket_id):
@@ -107,8 +108,8 @@ def deactivate_ticket(request, ticket_id):
 		ticket.active = 0
 		ticket.save()
 		return redirect('super_menue_tickets')
-	
-	
+
+
 @login_required
 def deactivate_users(request, user_id):
 	users = User.objects.get(pk=user_id)
@@ -125,7 +126,7 @@ def active_ticket(request, ticket_id):
 		ticket.active = 1
 		ticket.save()
 		return redirect('super_menue_tickets')
-	
+
 
 @login_required
 def active_users(request, user_id):
@@ -137,34 +138,34 @@ def active_users(request, user_id):
 
 
 def get_tickets(request, sorting_criteria):
-    p = Paginator(Ticket.objects.order_by(sorting_criteria), 8)
-    page = request.GET.get('page')
-    tickets = p.get_page(page)
-    return render(request, 'index.html', {'tickets': tickets})
+	p = Paginator(Ticket.objects.order_by(sorting_criteria), 8)
+	page = request.GET.get('page')
+	tickets = p.get_page(page)
+	return render(request, 'index.html', {'tickets': tickets})
 
 
 def index(request):
-    return get_tickets(request, '-created_at')
+	return get_tickets(request, '-created_at')
 
 
 def index_updated(request):
-    return get_tickets(request, '-updated_at')
+	return get_tickets(request, '-updated_at')
 
 
 def status_updated(request):
-    return get_tickets(request, '-status')
+	return get_tickets(request, '-status')
 
 
 def status_compartment(request):
-    return get_tickets(request, '-compartment')
+	return get_tickets(request, '-compartment')
 
 
 def status_created_by(request):
-    return get_tickets(request, '-assignee')
+	return get_tickets(request, '-assignee')
 
 
 def status_summary(request):
-    return get_tickets(request, '-title')
+	return get_tickets(request, '-title')
 
 
 @login_required
@@ -172,7 +173,9 @@ def searches(request):
 	word = Ticket.objects.all()
 	res = request.GET.get('search')
 	if res:
-		word = Ticket.objects.filter(Q(title__icontains=res) | Q(compartment__icontains=res) | Q(status__icontains=res) | Q(assignee__username__icontains=res)).distinct()
+		word = Ticket.objects.filter(
+			Q(title__icontains=res) | Q(compartment__icontains=res) | Q(status__icontains=res) | Q(
+				assignee__username__icontains=res)).distinct()
 	paginator = Paginator(word, 6)
 	page = request.GET.get('page')
 	try:
@@ -207,7 +210,7 @@ def super_menue_users(request):
 @login_required
 def ticket_by_id(request, ticket_id):
 	ticket = Ticket.objects.get(pk=ticket_id)
-	if request.user == ticket.assignee or request.user.is_superuser or\
+	if request.user == ticket.assignee or request.user.is_superuser or \
 			request.user.usercreate.compartment == ticket.compartment:
 		return render(request, 'ticket_by_id.html', {'ticket': ticket})
 	else:
