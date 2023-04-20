@@ -12,7 +12,6 @@ from django.urls import reverse_lazy, reverse
 from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.views.generic import TemplateView, View, CreateView, FormView, DetailView, ListView
-
 from .forms import *
 from .models import *
 from .utils import password_reset_token
@@ -437,7 +436,11 @@ class AdminHomeView(AdminRequiredMixin, TemplateView):
 	
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
-		context["pendingorders"] = Order.objects.filter(order_status="Order Received").order_by("-id")
+		queryset = Order.objects.filter(order_status="Order Received").order_by("-id")
+		paginator = Paginator(queryset, 12)
+		page_number = self.request.GET.get('page')
+		pendingorders = paginator.get_page(page_number)
+		context["pendingorders"] = pendingorders
 		return context
 
 
@@ -462,6 +465,15 @@ class AdminOrderListView(AdminRequiredMixin, ListView):
 	template_name = "adminpages/adminorderlist.html"
 	queryset = Order.objects.all().order_by("-id")
 	context_object_name = "allorders"
+	
+	def get_context_data(self, **kwargs):
+		context = super().get_context_data(**kwargs)
+		queryset = Order.objects.all().order_by('-id')
+		paginator = Paginator(queryset, 12)
+		page_number = self.request.GET.get('page')
+		allorders = paginator.get_page(page_number)
+		context['allorders'] = allorders
+		return context
 
 
 class AdminOrderStatusChangeView(AdminRequiredMixin, View):
