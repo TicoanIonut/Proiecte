@@ -108,7 +108,7 @@ class Order(models.Model):
 	total = models.PositiveIntegerField()
 	subtotal = models.PositiveIntegerField()
 	created_at = models.DateTimeField(auto_now_add=True)
-	order_status = models.CharField(max_length=50, choices=ORDER_STATUS)
+	order_status = models.CharField(max_length=50, choices=ORDER_STATUS, default="Order Received")
 	payment_method = models.CharField(
 		max_length=20, choices=METHOD, default="Cash On Delivery")
 	payment_completed = models.BooleanField(
