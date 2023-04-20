@@ -20,7 +20,7 @@
 
 
             {% if user.is_superuser or user.admin %}
-            <a class="btn btn-info" style="margin:10px; border-radius: 5px;"  href="{% url 'ecomm:adminhome' %}">Admin Home</a>
+            <a class="btn btn-outline-dark btn-secondary" style="margin:10px; border-radius: 5px;"  href="{% url 'ecomm:adminhome' %}">Admin Home</a>
             {% endif %}
             {% if request.user.customer %}
              <span style="color:#ffff">Hi, {{ request.user.username }} </span>

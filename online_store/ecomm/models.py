@@ -75,6 +75,12 @@ class CartProduct(models.Model):
 		total = self.product.price * self.quantity
 		return total
 	
+	@property
+	def total_sum(self):
+		order_items = self.cartproduct_set.all()
+		subtotals = sum([item.subtotal for item in order_items])
+		return subtotals
+	
 	def __str__(self):
 		return 'Cart' + str(self.cart.id) + 'CartProduct: ' + str(self.id)
 
