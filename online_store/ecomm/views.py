@@ -138,6 +138,17 @@ class EmptyCartView(EcomMixin, View):
 
 
 class CheckoutView(EcomMixin, CreateView):
+	template_name = "order_summary.html"
+	
+	def get_context_data(self, **kwargs):
+		cart_id = self.request.session.get('cart_id')
+		cart_obj = Cart.objects.get(id=cart_id)
+		order_items = cart_obj.cartproduct_set.all()
+		context = super(CheckoutView, self).get_context_data(**kwargs)
+		return context
+	
+
+class CheckoutView(EcomMixin, CreateView):
 	template_name = "checkout.html"
 	form_class = CheckoutForm
 	success_url = reverse_lazy('ecomm:home')
@@ -166,14 +177,14 @@ class CheckoutView(EcomMixin, CreateView):
 			mail = form.cleaned_data.get("email")
 			payment = form.cleaned_data.get("payment_method")
 			order_items = cart_obj.cartproduct_set.all()
-			send_order(fullname, shipping, telephone, mail, payment, order_items)
+			send_order(fullname, shipping, telephone, mail, payment, order_items, cart_obj)
 			del self.request.session['cart_id']
 		else:
 			return redirect('ecomm:home')
 		return super().form_valid(form)
 
 
-def send_order(fullname, shipping, telephone, mail, payment, order_items):
+def send_order(fullname, shipping, telephone, mail, payment, order_items, cart_obj):
 	subject = "Your order summary."
 	context = {
 		'fullname': fullname,
@@ -182,6 +193,7 @@ def send_order(fullname, shipping, telephone, mail, payment, order_items):
 		'mail': mail,
 		'payment': payment,
 		'order_items': order_items,
+		'cart_obj': cart_obj,
 	}
 	message = render_to_string('order_summary.html', context)
 	email = EmailMessage(subject, message, to=[mail])
