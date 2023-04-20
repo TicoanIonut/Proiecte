@@ -21,7 +21,6 @@
     <div class="col-lg-6">
         <div class="box-element" style="background-color: #fff;">
             <a class="btn btn-outline-dark" href="{% url 'ecomm:mycart' %}">&#x2190; Back to Cart</a>
-            <a class="btn btn-outline-dark" href="{% url 'ecomm:mycart' %}">&#x2190; order summary</a>
             {% if cart.cartproduct_set.all %}
 				<a style="float:right;" class="btn btn-outline-dark" href="{% url 'ecomm:emptycart'%}">Empty Cart</a>
 				{% endif %}

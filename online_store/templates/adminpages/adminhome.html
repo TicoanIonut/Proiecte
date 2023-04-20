@@ -33,5 +33,29 @@
         </div>
     </div>
 </div>
+<nav aria-label="..." class="">
+        <ul class="pagination justify-content-center">
+            {% if pendingorders.has_previous %}
+            <li class="page-item"><a class="page-link text-info" href="?page=1">First</a></li>
+            <li class="page-item">
+                <a class="page-link text-info" href="?page={{ pendingorders.previous_page_number }}">Previous</a>
+              </li>
+            {% endif %}
+            {% for i in pendingorders.paginator.page_range %}
+            {% if i == pendingorders.number %}
+            <li class="page-item active"><a class="page-link bg-info">{{i}}</a></li>
+            {% else %}
+            <li class="page-item "><a class="page-link text-info" href="?page={{i}}">{{i}}</a></li>
+            {% endif %}
+            {% endfor %}
 
+            {% if pendingorders.has_next %}
+            <li class="page-item">
+                <a class="page-link text-info" href="?page={{ pendingorders.next_page_number }}">Next</a>
+            </li>
+            <li class="page-item"><a class="page-link text-info" href="?page={{ pendingorders.paginator.num_pages }}">Last
+                    </a></li>
+            {% endif %}
+        </ul>
+      </nav>
 {% endblock %}
